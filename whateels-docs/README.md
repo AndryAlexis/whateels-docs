@@ -1,0 +1,1 @@
+https://tailwindcss.com/plus/templates/syntax/preview

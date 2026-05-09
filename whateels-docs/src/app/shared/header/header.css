@@ -1,0 +1,51 @@
+:host {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    font-family: "Lexend", sans-serif;
+
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+
+    background-color: #ffffff62; /* semi-transparent */
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%); /* for Safari */
+
+    padding: 0 var(--content-padding);
+
+    height: var(--header-height);
+
+    box-shadow: 0 0 10px #f0f0f1;
+
+    & > nav {
+
+        width: 100%;
+
+        & > ul {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
+
+    & .extra-options {
+        display: flex;
+        gap: 1rem;
+
+        & i {
+            color: var(--ui-accent-light);
+            font-size: 2rem;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--ui-brand-secondary);
+            }
+        }
+    }
+}

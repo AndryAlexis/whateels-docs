@@ -1,0 +1,7 @@
+:host {
+    & h3 {
+        font-size: .8rem;
+        font-weight: bold;
+        color: var(--ui-accent-dark);
+    }
+}

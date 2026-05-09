@@ -1,0 +1,8 @@
+:host {
+    height: calc(100dvh);
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
