@@ -1,5 +1,27 @@
 :host {
-    flex: 1;
+    height: inherit;
+    min-width: 320px;
 
-    padding: var(--margin-header-content) 2rem;
+    position: sticky;
+    top: var(--header-height);
+    max-height: calc(100dvh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
+
+    font-family: "Lexend", sans-serif;
+
+    flex-basis: 320px;
+    flex-grow: 1;
+
+    & > div {
+        overflow-y: auto;
+        height: inherit;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        & > nav {
+            padding: var(--margin-header-content) 2rem;
+        }
+    }
 }
