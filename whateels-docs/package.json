@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ghpages": "ng build --base-href /whateels-docs/",
+    "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/whateels-docs/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:whateels-docs": "node dist/whateels-docs/server/server.mjs"
