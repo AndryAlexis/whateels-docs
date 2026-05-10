@@ -1,3 +1,44 @@
 :host {
     display: flex;
+    font-family: "Lexend", sans-serif;
+
+    & footer {
+        flex: 1;
+    }
+
+    padding: 0 4rem var(--margin-header-content) 4rem;
+
+    & nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+
+        & > ul {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            &:last-of-type h4 {
+                text-align: right;
+            }
+
+            & h4 {
+                color: var(--ui-accent-dark);
+                font-size: .8rem;
+                font-weight: bold;
+            }
+
+            & a {
+                display: flex;
+                gap: .5rem;
+                text-decoration: none;
+                font-weight: bold;
+                color: var(--ui-accent-normal);
+
+                &:hover {
+                    color: var(--ui-accent-dark);
+                }
+            }
+        }
+    }
 }

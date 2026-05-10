@@ -21,6 +21,31 @@
 
         & > nav {
             padding: var(--margin-header-content) 2rem;
+
+            & > ul {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                & li {
+                    &:first-of-type {
+                        margin-bottom: 1rem;
+                    }
+
+                    &:not(:first-of-type) {
+                        padding-left: 1rem;
+                    }
+
+                    & a {
+                        color: var(--ui-accent-light);
+                        text-decoration: none;
+
+                        &:hover {
+                            color: var(--ui-accent-normal);
+                        }
+                    }
+                }
+            }
         }
     }
 }
