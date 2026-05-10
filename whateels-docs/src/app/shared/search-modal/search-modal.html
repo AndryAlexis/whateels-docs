@@ -1,4 +1,7 @@
-<div>
-	<i class="fas fa-search"></i>
-    <input type="text" placeholder="Find something..." />
+<div class="search-container">
+    <div class="search-input" (click)="$event.stopPropagation()">
+        <i class="fas fa-search"></i>
+        <input #searchInput type="text" placeholder="Find something..." autofocus/>
+    </div>
 </div>
+<div class="background-blur" (click)="searchModalService.close()"></div>

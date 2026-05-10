@@ -2,10 +2,8 @@
     width: 100vw;
     height: 100dvh;
 
-    background-color: #2213229d;
     position: fixed;
 
-    backdrop-filter: blur(5px);
     font-family: "Lexend", sans-serif;
 
     left: 0;
@@ -28,7 +26,23 @@
         opacity: 0;
     }
 
-    & > div {
+    & .search-container {
+        position: absolute;
+        inset: 0;
+        z-index: 1001;
+
+        display: flex;
+        justify-content: center;
+        max-width: 500px;
+        height: fit-content;
+        font-size: 1rem;
+
+        margin: 0 auto;
+
+        margin-top: calc(var(--header-height) + var(--margin-header-content));
+    }
+
+    & .search-input {
         display: flex;
         align-items: center;
         gap: .5rem;
@@ -40,10 +54,7 @@
         border: 1px solid var(--ui-accent-light);
 
         flex: 1;
-        max-width: 500px;
-        height: fit-content;
 
-        font-size: 1rem;
         color: var(--ui-accent-light);
 
         position: relative;
@@ -78,6 +89,17 @@
                 color: var(--ui-accent-light);
             }
         }
+    }
+
+    & .background-blur {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: inherit;
+        height: inherit;
+        backdrop-filter: blur(5px);
+        background-color: #2213229d;
+        cursor: pointer;
     }
 
 }
