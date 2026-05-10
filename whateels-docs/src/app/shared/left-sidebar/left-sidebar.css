@@ -1,19 +1,19 @@
 :host {
-    height: inherit;
-
-    position: sticky;
-    top: var(--header-height);
-    max-height: calc(100dvh - var(--header-height));
-    height: calc(100dvh - var(--header-height));
-
+    /* border: 1px solid red; */
     background-color: #f8fafc;
     font-family: "Lexend", sans-serif;
     flex-grow: 1;
     flex-basis: 320px;
+
+    height: inherit;
     
     & > div {
+
+        /* border: 2px solid cyan; */
+        position: sticky;
+        top: var(--header-height);
+        height: calc(100dvh - var(--header-height) - 1px);
         overflow-y: auto;
-        height: inherit;
 
         display: flex;
         justify-content: flex-end;

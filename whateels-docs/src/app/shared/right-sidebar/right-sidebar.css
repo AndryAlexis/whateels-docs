@@ -1,11 +1,10 @@
 :host {
-    height: inherit;
     min-width: 320px;
 
     position: sticky;
     top: var(--header-height);
+    align-self: flex-start;
     max-height: calc(100dvh - var(--header-height));
-    height: calc(100dvh - var(--header-height));
 
     font-family: "Lexend", sans-serif;
 
@@ -14,7 +13,7 @@
 
     & > div {
         overflow-y: auto;
-        height: inherit;
+        max-height: calc(100dvh - var(--header-height));
 
         display: flex;
         flex-direction: column;
