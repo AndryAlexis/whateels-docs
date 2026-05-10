@@ -1,4 +1,5 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-right-sidebar',
@@ -8,11 +9,26 @@ import { Component, signal, OnInit } from '@angular/core';
 })
 export class RightSidebar implements OnInit {
   activeSectionId = signal<string | null>(null);
+  private platformId = inject(PLATFORM_ID);
 
   ngOnInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Get CSS variables
+    const root = document.documentElement;
+    const headerHeight = getComputedStyle(root).getPropertyValue('--header-height').trim();
+    const marginHeaderContent = getComputedStyle(root).getPropertyValue('--margin-header-content').trim();
+
+    // Convert to pixels (assuming rem base is 16px)
+    const headerHeightPx = parseFloat(headerHeight) * 16;
+    const marginPx = parseFloat(marginHeaderContent) * 16;
+    const topMargin = -(headerHeightPx + marginPx);
+
     const options = {
       root: null,
-      rootMargin: '-100px 0px -66% 0px',
+      rootMargin: `${topMargin}px 0px -66% 0px`,
       threshold: 0,
     };
 
@@ -24,9 +40,9 @@ export class RightSidebar implements OnInit {
       });
     }, options);
 
-    // Observe all sections with ids
-    document.querySelectorAll('section[id]').forEach((section) => {
-      observer.observe(section);
+    // Observe all h2 elements with ids
+    document.querySelectorAll('h2[id]').forEach((heading) => {
+      observer.observe(heading);
     });
   }
 

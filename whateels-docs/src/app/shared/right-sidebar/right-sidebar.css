@@ -37,20 +37,25 @@
                     }
 
                     & a {
-                        color: var(--ui-accent-light);
                         text-decoration: none;
+                    }
+
+                    & a:not(.active) {
+                        color: var(--ui-accent-light);
 
                         &:hover {
                             color: var(--ui-accent-normal);
                         }
+                    }
+
+                    & a.active {
+                        color: var(--ui-brand-secondary) !important;
+                        font-weight: bold;
                     }
                 }
             }
         }
     }
 
-    a.active {
-        color: var(--ui-brand-secondary) !important;
-        font-weight: bold;
-    }
+
 }
