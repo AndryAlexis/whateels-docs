@@ -1,0 +1,30 @@
+button {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	background-color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+
+	padding: .75rem 1.25rem;
+	border-radius: 10px;
+	border: 1px solid var(--ui-accent-light);
+
+	width: 400px;
+
+	font-size: 1rem;
+	color: var(--ui-accent-light);
+
+	& i {
+		font-size: .9rem;
+		color: var(--ui-accent-light);
+	}
+
+	&:hover {
+		border-color: var(--ui-accent-dark);
+		color: var(--ui-accent-normal);
+
+		& i {
+			color: var(--ui-accent-normal);
+		}
+	}
+}

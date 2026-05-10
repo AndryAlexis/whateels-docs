@@ -25,11 +25,14 @@
             & > ul {
                 display: flex;
                 flex-direction: column;
-                gap: 1rem;
+                gap: .8rem;
 
                 & li {
                     &:first-of-type {
-                        margin-bottom: 1rem;
+                        margin-bottom: .8rem;
+                        font-size: .8rem;
+                        font-weight: bold;
+                        color: var(--ui-accent-dark);
                     }
 
                     &:not(:first-of-type) {
@@ -38,6 +41,7 @@
 
                     & a {
                         text-decoration: none;
+                        font-size: .8rem;
                     }
 
                     & a:not(.active) {
