@@ -1,0 +1,12 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 2rem;
+
+    & hr {
+        border: none;
+        border-top: 1px solid var(--ui-accent-light);
+        width: 100%;
+    }
+}
