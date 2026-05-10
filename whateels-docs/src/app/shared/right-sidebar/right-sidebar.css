@@ -48,4 +48,9 @@
             }
         }
     }
+
+    a.active {
+        color: var(--ui-brand-secondary) !important;
+        font-weight: bold;
+    }
 }
