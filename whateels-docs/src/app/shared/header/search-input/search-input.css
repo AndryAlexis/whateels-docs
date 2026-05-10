@@ -2,7 +2,7 @@ button {
     display: flex;
     align-items: center;
     gap: .5rem;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
 
     padding: 1rem 1.25rem;
