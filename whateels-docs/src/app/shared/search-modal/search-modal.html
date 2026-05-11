@@ -1,7 +1,55 @@
 <div class="search-container">
-    <div class="search-input" (click)="$event.stopPropagation()">
+    <div class="search-input">
         <i class="fas fa-search"></i>
-        <input #searchInput type="text" placeholder="Find something..." autofocus/>
+        <input 
+            #searchInput 
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchQueryChange()"
+            type="text" 
+            placeholder="Find something..." autofocus
+        />
+    </div>
+    <div class="search-results">
+        <!-- <div class="no-results">
+            <p>
+                No results found...
+            </p>
+            <i class="fa-regular fa-face-frown"></i>
+        </div> -->
+        <nav class="results">
+            <ul>
+                <li class="result-item">
+                    <a href="#">
+                        <p>
+                            Getting started
+                        </p>
+                        <p>
+                            Introduction
+                        </p>
+                    </a>
+                </li>
+                <li class="result-item">
+                    <a href="#">
+                        <p>
+                            Getting help
+                        </p>
+                        <p>
+                            Introduction / Getting started
+                        </p>
+                    </a>
+                </li>
+                <li class="result-item">
+                    <a href="#">
+                        <p>
+                            Installation
+                        </p>
+                        <p>
+                            Introduction / Installation
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <div class="background-blur" (click)="searchModalService.close()"></div>
