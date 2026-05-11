@@ -81,7 +81,7 @@
                                 font-size: 1.5rem;
 
                                 &:hover {
-                                    color: var(--ui-accent-normal);
+                                    color: var(--ui-brand-secondary);
                                 }
                             }
                         }

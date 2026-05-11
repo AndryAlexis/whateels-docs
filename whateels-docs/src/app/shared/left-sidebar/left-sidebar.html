@@ -1,5 +1,17 @@
 <aside>
     <nav>
+        <ul class="mobile-menu-header">
+            <li>
+                <button class="close-button" (click)="leftSidebarService.close()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </li>
+            <li>
+                <a href="/">
+                    <app-logo [width]="30" [height]="30"></app-logo>
+                </a>
+            </li>
+        </ul>
         <ul>
             <li>
                 <app-section 
