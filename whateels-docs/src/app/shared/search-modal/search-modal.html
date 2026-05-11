@@ -10,32 +10,37 @@
         />
     </div>
     <div class="search-results">
-        <!-- <div class="no-results">
-            <p>
-                No results found...
-            </p>
-            <i class="fa-regular fa-face-frown"></i>
-        </div> -->
-        <nav class="results" (mouseleave)="onResultsMouseLeave()">
-            <ul>
-                @for (item of resultItems; track item.title + item.subtitle; let i = $index) {
-                <li
-                    class="result-item"
-                    [attr.aria-selected]="item.selected"
-                    (mouseenter)="onResultHover(i)"
-                >
-                    <a href="#">
-                        <p>
-                            {{ item.title }}
-                        </p>
-                        <p>
-                            {{ item.subtitle }}
-                        </p>
-                    </a>
-                </li>
-                }
-            </ul>
-        </nav>
+        @if (hasSearchQuery) {
+            @if (hasFilteredResults) {
+            <nav class="results" (mouseleave)="onResultsMouseLeave()">
+                <ul>
+                    @for (item of filteredResultItems; track item.id) {
+                        <li
+                            class="result-item"
+                            [attr.aria-selected]="item.selected"
+                            (mouseenter)="onResultHover(item.id)"
+                        >
+                            <a href="#">
+                                <p>
+                                    {{ item.title }}
+                                </p>
+                                <p>
+                                    {{ item.subtitle }}
+                                </p>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+            } @else {
+            <div class="no-results">
+                <p>
+                    No results found...
+                </p>
+                <i class="fa-regular fa-face-frown"></i>
+            </div>
+            }
+        }
     </div>
 </div>
 <div class="background-blur" (click)="searchModalService.close()"></div>
