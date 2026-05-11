@@ -5,9 +5,12 @@
     flex-basis: 320px;
 
     height: inherit;
+
+    & .background {
+        display: none;
+    }
     
     & > aside {
-
         position: sticky;
         top: var(--header-height);
         height: calc(100dvh - var(--header-height) - 1px);
@@ -22,7 +25,6 @@
             padding: var(--margin-header-content) 2rem;
 
             & > ul {
-
                 &:first-of-type {
                     display: none;
                 }
@@ -50,6 +52,15 @@
 
         &.active {
             top: 0;
+        }
+
+        & .background {
+            display: block;
+            position: absolute;
+            inset: 0;
+            z-index: 1000;
+            background-color: #130a13bd;
+            cursor: pointer;
         }
 
         & > aside {

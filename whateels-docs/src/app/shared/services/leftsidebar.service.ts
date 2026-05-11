@@ -13,8 +13,4 @@ export class LeftSidebarService {
   close(): void {
     this.isOpen.set(false);
   }
-
-  toggle(): void {
-    this.isOpen.set(!this.isOpen());
-  }
 }

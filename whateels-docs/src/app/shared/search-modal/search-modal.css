@@ -83,14 +83,6 @@
                         }
                     }
 
-                    /* &:hover {
-                        background-color: #f8fafc;
-                        
-                        & p:first-of-type {
-                            color: var(--ui-brand-secondary) !important;
-                        }
-                    } */
-
                     & a {
                         text-decoration: none;
                         display: flex;
@@ -159,7 +151,7 @@
         }
     }
 
-    & .background-blur {
+    & .background {
         position: absolute;
         top: 0;
         left: 0;
