@@ -60,6 +60,11 @@
             }
         }
     }
+}
 
 
+@media (width < 1280px) {
+    :host {
+        display: none;
+    }
 }
