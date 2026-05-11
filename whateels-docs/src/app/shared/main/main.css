@@ -1,8 +1,6 @@
 :host {
     display: flex;
     flex-grow: 1;
-
-    /* padding: 0 var(--margin-header-content) 0 var(--margin-header-content); */
     
     & > div {
         height: inherit;
@@ -23,20 +21,10 @@
                 display: flex;
                 flex-direction: column;
 
-
                 color: var(--ui-brand-secondary);
                 font-size: .8rem;
                 font-weight: bold;
                 margin-bottom: .8rem;
-            }
-
-            & hr {
-                border: none;
-                border-top: 1px solid var(--ui-accent-light);
-                width: calc(100% - 4rem);
-
-                margin: 3rem 0;
-                box-sizing: border-box;
             }
 
             & > section {
@@ -81,9 +69,24 @@
         justify-content: center;
 
         & > div {
-
             & > main {
-                /* padding: var(--margin-header-content) 0 0 0; */
+                
+                padding: var(--margin-header-content) .85rem 0 .85rem;
+
+                & > section {
+                    & > div {
+                        & > section {
+                            & h2 {
+                                font-size: 1.5rem;
+                            }
+
+                            & p {
+                                font-size: .85rem;
+                                line-height: 1.25rem;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

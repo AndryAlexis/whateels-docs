@@ -10,9 +10,7 @@
     z-index: 99;
     width: 100%;
 
-    background-color: #ffffff62; /* semi-transparent */
-    backdrop-filter: blur(6px) saturate(180%);
-    -webkit-backdrop-filter: blur(6px) saturate(180%); /* for Safari */
+    background-color: white;
 
     padding: 0 var(--content-padding);
 

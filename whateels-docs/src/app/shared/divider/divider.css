@@ -10,3 +10,9 @@
         width: 100%;
     }
 }
+
+@media (width <= 1024px) {
+    :host {
+        margin: 1.25rem 0;
+    }
+}

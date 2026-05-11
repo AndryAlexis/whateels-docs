@@ -42,3 +42,24 @@
         }
     }
 }
+
+@media (width <= 1024px) {
+    :host {
+        padding: 0 .75rem var(--margin-header-content) .75rem;
+
+        & nav {
+            & ul {
+                &:last-of-type {
+                    text-align: right;
+                }
+                & li {
+
+                    & a {
+                        font-size: .7rem;
+                        
+                    }
+                }
+            }
+        }
+    }
+}
