@@ -74,6 +74,11 @@
                 }
             }
         }
+    }
+}
 
+@media (width <= 1024px) {
+    :host {
+        justify-content: center;
     }
 }

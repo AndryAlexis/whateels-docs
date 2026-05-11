@@ -30,3 +30,48 @@
         gap: 1rem;
     }
 }
+
+@media (width <= 1024px) {
+    /* :host {
+        display: none;
+    } */
+
+    :host {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        z-index: 1000;
+
+        background-color: transparent;
+
+        & div {
+            position: absolute;
+            inset: 0;
+            z-index: 1001;
+            height: inherit;
+
+            display: flex;
+            justify-content: flex-start;
+
+            background-color: transparent;
+
+            & nav {
+                background-color: white;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: var(--margin-header-content) 2rem;
+
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                & > ul {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+            }
+        }
+    }
+}
