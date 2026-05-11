@@ -17,11 +17,13 @@
     padding: 0 1rem;
 
     &.active {
+        display: unset;
         pointer-events: auto;
         opacity: 1;
     }
 
     &:not(.active) {
+        display: none;
         pointer-events: none;
         opacity: 0;
     }
