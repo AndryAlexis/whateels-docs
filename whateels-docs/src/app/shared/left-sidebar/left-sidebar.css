@@ -52,6 +52,10 @@
 
         &.active {
             top: 0;
+
+            & > aside {
+                box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            }
         }
 
         & .background {
@@ -75,7 +79,6 @@
             justify-content: flex-start;
             min-width: inherit;
             width: 320px;
-            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
 
             background-color: transparent;
 

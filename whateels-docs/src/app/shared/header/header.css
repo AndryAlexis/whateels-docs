@@ -19,6 +19,8 @@
     max-height: var(--header-height);
 
     box-shadow: 0 2px 10px #f0f0f1;
+    clip-path: inset(0 -20px -20px -20px);
+    transform: translateZ(0);
 
     & > nav {
 
