@@ -16,38 +16,24 @@
             </p>
             <i class="fa-regular fa-face-frown"></i>
         </div> -->
-        <nav class="results">
+        <nav class="results" (mouseleave)="onResultsMouseLeave()">
             <ul>
-                <li class="result-item">
+                @for (item of resultItems; track item.title + item.subtitle; let i = $index) {
+                <li
+                    class="result-item"
+                    [attr.aria-selected]="item.selected"
+                    (mouseenter)="onResultHover(i)"
+                >
                     <a href="#">
                         <p>
-                            Getting started
+                            {{ item.title }}
                         </p>
                         <p>
-                            Introduction
+                            {{ item.subtitle }}
                         </p>
                     </a>
                 </li>
-                <li class="result-item">
-                    <a href="#">
-                        <p>
-                            Getting help
-                        </p>
-                        <p>
-                            Introduction / Getting started
-                        </p>
-                    </a>
-                </li>
-                <li class="result-item">
-                    <a href="#">
-                        <p>
-                            Installation
-                        </p>
-                        <p>
-                            Introduction / Installation
-                        </p>
-                    </a>
-                </li>
+                }
             </ul>
         </nav>
     </div>

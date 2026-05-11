@@ -2,6 +2,12 @@ import { Component, HostBinding, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SearchModalService } from '../services/search-modal.service';
 
+type SearchResultItem = {
+  title: string;
+  subtitle: string;
+  selected: boolean;
+};
+
 @Component({
   selector: 'app-search-modal',
   imports: [FormsModule],
@@ -11,6 +17,23 @@ import { SearchModalService } from '../services/search-modal.service';
 export class SearchModal {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   searchQuery = '';
+  resultItems: SearchResultItem[] = [
+    {
+      title: 'Getting started',
+      subtitle: 'Introduction',
+      selected: true,
+    },
+    {
+      title: 'Getting help',
+      subtitle: 'Introduction / Getting started',
+      selected: false,
+    },
+    {
+      title: 'Installation',
+      subtitle: 'Introduction / Installation',
+      selected: false,
+    },
+  ];
   results = [
     'Angular Basics',
     'Angular Signals',
@@ -43,5 +66,23 @@ export class SearchModal {
 
     const results = this.getResults(this.searchQuery);
     console.log('Search results:', results);
+  }
+
+  onResultHover(index: number): void {
+    this.resultItems = this.resultItems.map((item, currentIndex) => ({
+      ...item,
+      selected: currentIndex === index,
+    }));
+  }
+
+  onResultsMouseLeave(): void {
+    this.resultItems = this.resultItems.map((item, currentIndex) => ({
+      ...item,
+      selected: currentIndex === 0,
+    }));
+  }
+
+  getAriaSelectedItems(): SearchResultItem[] {
+    return this.resultItems.filter((item) => item.selected);
   }
 }
