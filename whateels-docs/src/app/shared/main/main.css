@@ -2,6 +2,8 @@
     display: flex;
     flex-grow: 1;
 
+    /* padding: 0 var(--margin-header-content) 0 var(--margin-header-content); */
+    
     & > div {
         height: inherit;
         flex-grow: 1;
@@ -21,7 +23,6 @@
                 display: flex;
                 flex-direction: column;
 
-                padding: 0 2rem;
 
                 color: var(--ui-brand-secondary);
                 font-size: .8rem;
@@ -34,7 +35,7 @@
                 border-top: 1px solid var(--ui-accent-light);
                 width: calc(100% - 4rem);
 
-                margin: 3rem auto;
+                margin: 3rem 0;
                 box-sizing: border-box;
             }
 
@@ -42,9 +43,7 @@
                 display: flex;
                 flex-direction: column;
 
-                padding: 0 2rem 0 2rem;
                 height: inherit;
-
 
                 & > div {
                     display: flex;
@@ -80,5 +79,12 @@
 @media (width <= 1024px) {
     :host {
         justify-content: center;
+
+        & > div {
+
+            & > main {
+                /* padding: var(--margin-header-content) 0 0 0; */
+            }
+        }
     }
 }
