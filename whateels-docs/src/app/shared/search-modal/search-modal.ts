@@ -38,6 +38,7 @@ export class SearchModal {
       selected: false,
     },
   ];
+  filteredResultItems: SearchResultItem[] = [...this.resultItems];
   results = [
     'Angular Basics',
     'Angular Signals',
@@ -64,18 +65,16 @@ export class SearchModal {
     return this.searchModalService.isOpen();
   }
 
-  get filteredResultItems(): SearchResultItem[] {
+  private updateFilteredResultItems(): void {
     const query = this.searchQuery.trim().toLowerCase();
 
     if (!query) {
-      return this.resultItems;
+      this.filteredResultItems = [...this.resultItems];
+      return;
     }
 
-    return this.resultItems.filter((item) => {
-      return (
-        item.title.toLowerCase().includes(query) ||
-        item.subtitle.toLowerCase().includes(query)
-      );
+    this.filteredResultItems = this.resultItems.filter((item) => {
+      return item.title.toLowerCase().includes(query);
     });
   }
 
@@ -94,6 +93,8 @@ export class SearchModal {
     const results = this.getResults(this.searchQuery);
     console.log('Search results:', results);
 
+    this.updateFilteredResultItems();
+
     const firstFilteredItem = this.filteredResultItems[0];
 
     if (!firstFilteredItem) {
@@ -108,6 +109,8 @@ export class SearchModal {
       ...item,
       selected: item.id === firstFilteredItem.id,
     }));
+
+    this.updateFilteredResultItems();
   }
 
   onResultHover(itemId: number): void {
@@ -115,6 +118,8 @@ export class SearchModal {
       ...item,
       selected: item.id === itemId,
     }));
+
+    this.updateFilteredResultItems();
   }
 
   onResultsMouseLeave(): void {
@@ -128,6 +133,8 @@ export class SearchModal {
       ...item,
       selected: item.id === firstFilteredItem.id,
     }));
+
+    this.updateFilteredResultItems();
   }
 
   getAriaSelectedItems(): SearchResultItem[] {
