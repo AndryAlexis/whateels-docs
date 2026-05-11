@@ -71,7 +71,7 @@
         & > div {
             & > main {
                 
-                padding: var(--margin-header-content) .85rem 0 .85rem;
+                padding: calc(var(--margin-header-content) / 2) .85rem 0 .85rem;
 
                 & > section {
                     & > div {
