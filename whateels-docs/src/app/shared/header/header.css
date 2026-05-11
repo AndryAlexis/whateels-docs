@@ -61,6 +61,8 @@
 
 @media (width <= 1024px) {
     :host {
+        padding: 0 1rem;
+
         & > nav {
             & > ul {
                 & > li {
