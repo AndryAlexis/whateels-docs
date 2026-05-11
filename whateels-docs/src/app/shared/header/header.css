@@ -36,13 +36,8 @@
             & > li {
                 flex: 1;
 
-
-
                 &:first-of-type {
-                    margin-right: auto;
-                }
-                &:last-of-type {
-                    margin-left: auto;
+                    display: none;
                 }
             }
         }
@@ -60,6 +55,38 @@
 
             &:hover {
                 color: var(--ui-brand-secondary);
+            }
+        }
+    }
+}
+
+@media (width <= 1024px) {
+    :host {
+        & > nav {
+            & > ul {
+                & > li {
+                    &:first-of-type {
+                        display: flex;
+                        width: fit-content;
+                        flex: 0;
+
+                        .menu-button {
+                            border: 0;
+                            background-color: transparent;
+                            cursor: pointer;
+                            padding: 0;
+
+                            & i {
+                                color: var(--ui-accent-light);
+                                font-size: 1.5rem;
+
+                                &:hover {
+                                    color: var(--ui-accent-normal);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
