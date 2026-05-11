@@ -7,7 +7,7 @@
 
     height: inherit;
     
-    & > div {
+    & > aside {
 
         position: sticky;
         top: var(--header-height);
@@ -24,7 +24,7 @@
         }
     }
 
-    & > div > nav > ul {
+    & > aside > nav > ul {
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -46,7 +46,7 @@
 
         background-color: transparent;
 
-        & div {
+        & aside {
             position: absolute;
             inset: 0;
             z-index: 1001;
@@ -58,7 +58,7 @@
             background-color: transparent;
 
             & nav {
-                background-color: white;
+                background-color: rgba(255, 255, 255, 0.301);
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 padding: var(--margin-header-content) 2rem;
 
