@@ -1,14 +1,25 @@
 :host {
     display: flex;
     font-family: "Lexend", sans-serif;
-    padding: 0 4rem var(--margin-header-content) 4rem;
+    padding: 0 2rem var(--margin-header-content) 2rem;
 
     & footer {
         flex: 1;
+        flex-direction: column;
     }
 
-    & nav {
+    & > nav {
         display: flex;
+
+        & ul {
+            flex: 1;
+            flex-wrap: wrap;
+        }
+    }
+
+    & nav.prev-and-next-links {
+        display: flex;
+        flex: 1;
         justify-content: space-between;
         gap: 2rem;
 
@@ -40,13 +51,58 @@
             }
         }
     }
+
+    & nav.ub-social-media {
+
+        & > ul {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+
+            & li {
+                display: grid;
+                gap: .5rem;
+
+                & > ul {
+                    display: flex;
+                    gap: .5rem;
+
+                    & li {
+                        display: flex;
+                        gap: .5rem;
+                        align-items: center;
+
+                        & a {
+                            text-decoration: none;
+                            color: var(--ui-accent-normal);
+                            font-size: .8rem;
+
+                            &:hover {
+                                color: var(--ui-accent-dark);
+                            }
+                        }
+
+                        & i {
+                            color: var(--ui-accent-light);
+                            font-size: 1.5rem;
+
+                            &:hover {
+                                color: var(--ui-brand-secondary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media (width <= 1024px) {
     :host {
         padding: 0 .75rem calc(var(--margin-header-content) / 2) .75rem;
 
-        & nav {
+        & nav.prev-and-next-links {
             & ul {
                 &:last-of-type {
                     text-align: right;
