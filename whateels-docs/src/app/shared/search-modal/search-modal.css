@@ -160,11 +160,4 @@
         background-color: #130a13bd;
         cursor: pointer;
     }
-
 }
-
-/* @media (width <= 768px) {
-    :host {
-        padding: 0 1rem;
-    }
-} */
