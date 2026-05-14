@@ -5,9 +5,9 @@ import { LeftSidebar } from '../shared/left-sidebar/left-sidebar';
 import { SearchModal } from '../shared/search-modal/search-modal';
 
 @Component({
-  selector: 'app-homepage',
+  selector: 'app-doc',
   imports: [Header, Main, LeftSidebar, SearchModal],
-  templateUrl: './homepage.html',
-  styleUrl: './homepage.css',
+  templateUrl: './doc.html',
+  styleUrl: './doc.css',
 })
-export class Homepage {}
+export class Doc {}
