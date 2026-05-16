@@ -2,12 +2,13 @@ import { Component, input } from '@angular/core';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
+import { PaginationComponent } from '../pagination/pagination';
 import { ObservableSectionDirective } from '../directives/observable-section.directive';
 import { DocPage } from '../../doc/doc-page.service';
 
 @Component({
   selector: 'app-main',
-  imports: [RightSidebar, Footer, Divider, ObservableSectionDirective],
+  imports: [RightSidebar, Footer, Divider, PaginationComponent, ObservableSectionDirective],
   templateUrl: './main.html',
   styleUrl: './main.css',
 })

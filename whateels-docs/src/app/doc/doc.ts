@@ -23,7 +23,7 @@ type DocViewState = {
 })
 export class Doc {
   private readonly route = inject(ActivatedRoute);
-  private readonly docPageService : DocPageService = inject(DocPageService);
+  private readonly docPageService: DocPageService = inject(DocPageService);
 
   readonly pageState$ = this.route.paramMap.pipe(
     map((params) => params.get('slug') ?? DEFAULT_DOC_SLUG),

@@ -2,19 +2,21 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export type DocSection = {
-  id: string;
-  title: string;
-  paragraphs: string[];
+    id: string;
+    title: string;
+    paragraphs: string[];
 };
 
 export type DocPage = {
-  slug: string;
-  title: string;
-  summary?: string;
-  sections: DocSection[];
+    slug: string;
+    title: string;
+    summary?: string;
+    sections: DocSection[];
+    previous: { slug: string; title: string };
+    next: { slug: string; title: string };
 };
 
-export const DEFAULT_DOC_SLUG = 'introduction';
+export const DEFAULT_DOC_SLUG = 'Getting Started';
 
 @Injectable({ providedIn: 'root' })
 export class DocPageService {

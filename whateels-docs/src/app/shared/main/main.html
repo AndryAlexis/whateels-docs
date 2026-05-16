@@ -50,6 +50,13 @@
             }
         }
     </main>
+    @if (page(); as docPage) {
+        <app-pagination 
+            [previous]="docPage.previous" 
+            [next]="docPage.next"
+        ></app-pagination>
+    }
+
     <app-footer></app-footer>
 </div>
 <app-right-sidebar [sections]="page()?.sections ?? []"></app-right-sidebar>
