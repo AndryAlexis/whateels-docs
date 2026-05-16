@@ -1,1 +1,22 @@
-<p>pagination works!</p>
+@if (previous() || next()) {
+    <nav class="prev-and-next-links">
+        <ul>
+            @if (previous(); as prev) {
+                <li><h4>Previous</h4></li>
+                <li>
+                    <a [href]="'/' + prev.slug"><i class="fa-solid fa-arrow-left"></i>
+                        {{ prev.title }}
+                    </a>
+                </li>
+            }
+        </ul>
+        <ul>
+            @if (next(); as nextPage) {
+                <li><h4>Next</h4></li>
+                <li>
+                    <a [href]="'/' + nextPage.slug">{{ nextPage.title }}<i class="fa-solid fa-arrow-right"></i></a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
