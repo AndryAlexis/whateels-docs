@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ObservableSectionService } from '../services/observable-section.service';
+import { DocSection } from '../../doc/doc-page.service';
 
 @Component({
   selector: 'app-right-sidebar',
@@ -9,6 +10,7 @@ import { ObservableSectionService } from '../services/observable-section.service
 })
 export class RightSidebar {
   private observableService = inject(ObservableSectionService);
+  readonly sections = input<DocSection[]>([]);
   activeSectionId = this.observableService.activeSectionId;
 
   isActive(fragmentId: string): boolean {

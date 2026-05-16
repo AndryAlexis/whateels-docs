@@ -1,110 +1,55 @@
 <div>
     <main>
-        <h1>
-            Introduction
-        </h1>
-        <section>
-            <div>
+        @if (loading()) {
+            <section class="page-status">
+                <h1>Loading page...</h1>
+                <p>Fetching the document content from the API.</p>
+            </section>
+        } @else if (error()) {
+            <section class="page-status page-status--error">
+                <h1>Page unavailable</h1>
+                <p>{{ error() }}</p>
+            </section>
+        } @else if (page(); as docPage) {
+            <h1>
+                {{ docPage.title }}
+            </h1>
+
+            @if (docPage.summary) {
                 <section>
-                    <h2>
-                        Installation
-                    </h2>
-                    <p>
-                        Quasi sapiente voluptates aut minima non doloribus similique quisquam. In quo expedita ipsum nostrum corrupti incidunt. Et aut eligendi ea perferendis.
-                    </p>
+                    <div>
+                        <section>
+                            <p>
+                                {{ docPage.summary }}
+                            </p>
+                        </section>
+                    </div>
                 </section>
-            </div>
-        </section>
-        <app-divider></app-divider>
-        <section>
-            <div>
+                <app-divider></app-divider>
+            }
+
+            @for (section of docPage.sections; track section.id; let last = $last) {
                 <section>
-                    <h2 id="quis-vel-iste-dicta" appObservableSection>
-                        Quis vel iste dicta
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                    </p>
+                    <div>
+                        <section>
+                            <h2 [id]="section.id" appObservableSection>
+                                {{ section.title }}
+                            </h2>
+                            @for (paragraph of section.paragraphs; track $index) {
+                                <p>
+                                    {{ paragraph }}
+                                </p>
+                            }
+                        </section>
+                    </div>
                 </section>
-                <section>
-                    <h2 id="et-pariatur-ab-quas" appObservableSection>
-                        Et pariatur ab quas
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur quaerat exercitationem. Consequatur et cum atque mollitia qui quia necessitatibus.
-                    </p>
-                    <p>
-                        Possimus saepe veritatis sint nobis et quam eos. Architecto consequatur odit perferendis fuga eveniet possimus rerum cumque. Ea deleniti voluptatum deserunt voluptatibus ut non iste. Provident nam asperiores vel laboriosam omnis ducimus enim nesciunt quaerat. Minus tempora cupiditate est quod.
-                    </p>
-                </section>
-            </div>
-        </section>
-        <app-divider></app-divider>
-        <section>
-            <div>
-                <section>
-                    <h2 id="natus-aspernatur-iste" appObservableSection>
-                        Natus aspernatur iste
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                    </p>
-                </section>
-            </div>
-        </section>
-        <app-divider></app-divider>
-        <section>
-            <div>
-                <section>
-                    <h2 id="quos-porro-ut-molestiae" appObservableSection>
-                        Quos porro ut molestiae
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                    </p>
-                </section>
-                <section>
-                    <h2 id="voluptatem-quas-possimus" appObservableSection>
-                        Voluptatem quas possimus
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                    </p>
-                </section>
-            </div>
-        </section>
-        <app-divider></app-divider>
-        <section>
-            <div>
-                <section>
-                    <h2 id="id-vitae-minima" appObservableSection>
-                        Id vitae minima
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                    </p>
-                </section>
-                <section>
-                    <h2 id="vitae-laborum-maiores" appObservableSection>
-                        Vitae laborum maiores
-                    </h2>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem eos, recusandae quisquam vitae voluptatibus voluptatem vel ex repellat debitis enim deserunt atque quam at fugit blanditiis. Facilis, architecto voluptas? At dolor, rerum laudantium vero esse, laborum voluptates similique id numquam facilis eveniet rem odio assumenda. Ducimus placeat earum ipsum optio reprehenderit vitae at explicabo quas possimus! Deleniti, quos. Commodi obcaecati eaque quis sed deserunt, nemo perspiciatis molestiae nihil deleniti quos earum accusantium fuga facilis at quam maxime, rerum excepturi mollitia consectetur sint aliquam eum itaque placeat nulla. Blanditiis aliquam eveniet eos architecto nulla amet quibusdam repellat beatae quas explicabo fugit consequuntur cum neque assumenda exercitationem, esse ad quasi in quam reiciendis corrupti placeat vitae cumque. Quasi deleniti totam assumenda magnam incidunt doloremque dolorem impedit ex, nam repudiandae recusandae atque ducimus fugit eaque neque sint quis cumque nihil animi ullam architecto est maxime possimus fuga. Provident laboriosam ullam, necessitatibus id enim quas dolorem accusantium officiis expedita rerum quia soluta natus magni alias culpa repellendus nemo aspernatur illum. Atque facilis deleniti, a eum animi, facere suscipit rem delectus enim aperiam repellat recusandae molestiae ipsa labore ipsam, quia aliquam. Quis consequatur quam nesciunt consequuntur magni, dolore nulla possimus amet nobis voluptatem unde doloremque.
-                    </p>
-                </section>
-                <section>
-                    <h2 id="corporis-exercitationem" appObservableSection>
-                        Corporis exercitationem
-                    </h2>
-                    <p>
-                        Sit commodi iste iure molestias qui amet voluptatem sed quaerat. Nostrum aut pariatur. Sint ipsa praesentium dolor error cumque velit tenetur.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, ullam vel laudantium fuga quisquam doloribus, consequatur quod reprehenderit ad cumque ducimus! Ipsum necessitatibus molestias expedita, tempora labore quasi quod commodi qui voluptate, autem itaque, architecto minus. Dolore molestias hic excepturi.
-                    </p>
-                </section>
-            </div>
-        </section>
-        <app-divider></app-divider>
+
+                @if (!last) {
+                    <app-divider></app-divider>
+                }
+            }
+        }
     </main>
     <app-footer></app-footer>
 </div>
-<app-right-sidebar></app-right-sidebar>
+<app-right-sidebar [sections]="page()?.sections ?? []"></app-right-sidebar>

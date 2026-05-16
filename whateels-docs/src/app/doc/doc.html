@@ -1,6 +1,8 @@
 <app-header></app-header>
 <div class="wrapper">
     <app-left-sidebar></app-left-sidebar>
-    <app-main></app-main>
+    @if (pageState$ | async; as state) {
+        <app-main [page]="state.page" [loading]="state.loading" [error]="state.error"></app-main>
+    }
 </div>
 <app-search-modal></app-search-modal>
