@@ -80,6 +80,10 @@
                 }
             }
         }
+
+        & > app-divider {
+            padding: 0 2rem;
+        }
     }
 }
 
@@ -110,6 +114,10 @@
                         }
                     }
                 }
+            }
+
+            & > app-divider {
+                padding: 0 .85rem;
             }
         }
     }
