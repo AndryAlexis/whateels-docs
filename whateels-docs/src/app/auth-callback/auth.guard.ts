@@ -1,28 +1,28 @@
+
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { CanActivateFn } from '@angular/router';
+import { AuthService } from './auth.service';
 
-function isJwtValid(token: string | null): boolean {
-    if (!token) return false;
-    try {
-        const parts = token.split('.');
-        if (parts.length !== 3) return false;
-        const payload: JwtPayload = jwtDecode(token);
-        if (payload.exp && payload.exp * 1000 <= Date.now()) return false;
-        return true;
-    } catch {
-        return false;
-    }
-}
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router);
   if (typeof window === 'undefined') return true;
-  const token = localStorage.getItem('auth_token');
-  if (isJwtValid(token)) {
+  const token = authService.getAccessToken();
+  if (authService.hasValidAccessToken()) {
     return true;
-  } else {
-    router.navigateByUrl('/?error=unauthorized');
-    return false;
   }
+
+  authService.clearAccessToken();
+  if (!token) {
+    authService.redirectToRootWithError('missing');
+  } else {
+    // Check if token is expired
+    const payload = authService.decodeToken(token);
+    if (payload && payload.exp && payload.exp * 1000 <= Date.now()) {
+      authService.redirectToRootWithError('expired');
+    } else {
+      authService.redirectToRootWithError('unauthorized');
+    }
+  }
+  return false;
 };
