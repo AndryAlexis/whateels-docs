@@ -1,3 +1,4 @@
+
 import { Injectable, signal } from '@angular/core';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
@@ -15,6 +16,16 @@ export class AuthService {
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
+  /**
+   * Returns the dashboard route for the current user based on their role code.
+   */
+  getDashboardRoute(): string {
+    const role = this.getRoleCode();
+    if (role === 1) return '/super-admin';
+    if (role === 2) return '/admin';
+    return '/dashboard';
   }
 
   getAccessToken(): string | null {
@@ -39,7 +50,6 @@ export class AuthService {
     localStorage.removeItem(this.accessTokenKey);
     this.isAuthenticated.set(false);
   }
-
 
   /**
    * Redirects to the root page with an error query parameter.

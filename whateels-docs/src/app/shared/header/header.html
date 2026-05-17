@@ -37,7 +37,7 @@
                         </div>
                     </ng-container>
                     <ng-template #loginTemplate>
-                        <a href="./dashboard">
+                        <a [href]="auth.getDashboardRoute()">
                             <i class="fa-solid fa-user"></i>
                         </a>
                     </ng-template>
