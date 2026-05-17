@@ -21,19 +21,26 @@
                     </a>
                 </li>
                 <li>
-                    <div class="floating-menu-container">
-                        <button (click)="floatingMenu.toggle()">
-                            <i class="fa-solid fa-user"></i>
-                        </button>
-                        <div class="floating-menu" *ngIf="floatingMenu.isOpenValue">
-                            <a href="http://localhost:3000/auth/github/login">
-                                <span>
-                                    Login with Github 
-                                </span>
-                                <i class="fa-brands fa-github"></i>
-                            </a>
+                    <ng-container *ngIf="!auth.isAuthenticated(); else loginTemplate">
+                        <div class="floating-menu-container">
+                            <button (click)="floatingMenu.toggle()">
+                                <i class="fa-regular fa-user"></i>
+                            </button>
+                            <div class="floating-menu" *ngIf="floatingMenu.isOpenValue">
+                                <a href="http://localhost:3000/auth/github/login">
+                                    <span>
+                                        Login with Github 
+                                    </span>
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
+                    <ng-template #loginTemplate>
+                        <a href="./dashboard">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                    </ng-template>
                 </li>
             </ul>
         </li>

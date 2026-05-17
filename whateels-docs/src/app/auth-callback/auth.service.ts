@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 type AppJwtPayload = JwtPayload & {
@@ -11,7 +11,7 @@ type AppJwtPayload = JwtPayload & {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly accessTokenKey = 'auth_token';
-  private readonly apiBaseUrl = 'http://localhost:3000';
+  isAuthenticated = signal(this.hasValidAccessToken());
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
@@ -29,6 +29,7 @@ export class AuthService {
       return;
     }
     localStorage.setItem(this.accessTokenKey, token);
+    this.isAuthenticated.set(this.hasValidAccessToken());
   }
 
   clearAccessToken(): void {
@@ -36,6 +37,7 @@ export class AuthService {
       return;
     }
     localStorage.removeItem(this.accessTokenKey);
+    this.isAuthenticated.set(false);
   }
 
 
@@ -65,6 +67,7 @@ export class AuthService {
 
   hasValidAccessToken(): boolean {
     const token = this.getAccessToken();
+    console.log('Checking token validity. Token found:', token);
     if (!token) {
       return false;
     }
