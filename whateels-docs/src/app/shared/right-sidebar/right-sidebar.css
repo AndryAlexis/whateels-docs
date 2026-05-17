@@ -39,9 +39,13 @@
                         padding-left: 1rem;
                     }
 
-                    & a {
+                    & a, p {
                         text-decoration: none;
                         font-size: .8rem;
+                    }
+
+                    & p {
+                        color: var(--ui-accent-normal);
                     }
 
                     & a:not(.active) {

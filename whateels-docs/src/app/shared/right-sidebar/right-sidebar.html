@@ -6,10 +6,17 @@
                     On this page
                 </h4>
             </li>
-            @for (section of sections(); track section.id) {
+            @if (sections().length === 0) {
                 <li>
-                    <a [href]="'#' + section.id" [class.active]="isActive(section.id)">{{ section.title }}</a>
+                    <p>No sections found.</p>
                 </li>
+            }
+            @else {
+                @for (section of sections(); track section.id) {
+                    <li>
+                        <a [href]="'#' + section.id" [class.active]="isActive(section.id)">{{ section.title }}</a>
+                    </li>
+                }
             }
         </ul>
     </nav>
