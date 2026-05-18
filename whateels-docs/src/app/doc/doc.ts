@@ -10,7 +10,7 @@ import { CategoryService, DocCategory } from './doc-category.service';
 import { AuthService } from '../auth-callback/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { DEFAULT_DOC_SLUG, DocPage, DocPageService } from './doc-page.service';
-import { catchError, of, from, map, startWith, switchMap } from 'rxjs';
+import { catchError, of, from, map, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-doc',
@@ -35,6 +35,9 @@ export class Doc {
     map((params) => params.get('slug') ?? DEFAULT_DOC_SLUG),
     switchMap((slug) =>
       from(this.docPageService.getPage(slug)).pipe(
+        tap((page) => {
+          console.log('Fetched page JSON from /page/:slug:', page);
+        }),
         map(
           (page): { slug: string; loading: boolean; page: DocPage | null; error: string | null } => ({
             slug,

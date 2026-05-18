@@ -14,7 +14,7 @@
             @else {
                 @for (section of sections(); track section.id) {
                     <li>
-                        <a [href]="'#' + section.id" [class.active]="isActive(section.id)">{{ section.title }}</a>
+                        <a [href]="'#' + fragmentId(section.id)" [class.active]="isActive(fragmentId(section.id))">{{ section.heading }}</a>
                     </li>
                 }
             }

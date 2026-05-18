@@ -12,16 +12,17 @@
             </section>
         } @else if (page(); as docPage) {
             <h1>
-                {{ docPage.title }}
+                {{ docPage.category.title }}
             </h1>
 
-            @if (docPage.summary) {
+            @if (docPage.title) {
                 <section>
                     <div>
                         <section>
-                            <p>
-                                {{ docPage.summary }}
-                            </p>
+                            <h2>
+                                {{ docPage.title }}
+                            </h2>
+                            <p [textContent]="docPage.summary ? '\n' + docPage.summary : ''"></p>
                         </section>
                     </div>
                 </section>
@@ -33,27 +34,28 @@
                     <div>
                         <section>
                             <h2 [id]="section.id" appObservableSection>
-                                {{ section.title }}
+                                {{ section.heading }}
                             </h2>
                             @for (paragraph of section.paragraphs; track $index) {
                                 <p>
-                                    {{ paragraph }}
+                                    {{ paragraph.body }}
                                 </p>
                             }
                         </section>
                     </div>
                 </section>
-
+<!-- 
                 @if (!last) {
                     <app-divider></app-divider>
-                }
+                } -->
+                <app-divider></app-divider>
             }
         }
     </main>
     @if (page(); as docPage) {
         <app-pagination
-            [next]="docPage.next"
-            [previous]="docPage.previous"
+            [next]="docPage.next_page"
+            [previous]="docPage.previous_page"
         ></app-pagination>
     }
     <app-divider></app-divider>

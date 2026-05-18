@@ -13,6 +13,10 @@ export class RightSidebar {
   readonly sections = input<DocSection[]>([]);
   activeSectionId = this.observableService.activeSectionId;
 
+  fragmentId(sectionId: number): string {
+    return String(sectionId);
+  }
+
   isActive(fragmentId: string): boolean {
     return this.activeSectionId() === fragmentId;
   }

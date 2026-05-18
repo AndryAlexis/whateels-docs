@@ -7,6 +7,6 @@ import { Component, input } from '@angular/core';
   styleUrl: './pagination.css',
 })
 export class PaginationComponent {
-  public readonly previous = input<{ slug: string; title: string } | undefined>(undefined);
-  public readonly next = input<{ slug: string; title: string } | undefined>(undefined);
+  public readonly previous = input<{ slug: string; title: string } | null>(null);
+  public readonly next = input<{ slug: string; title: string } | null>(null);
 }
