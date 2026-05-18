@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DocCategory } from '../../doc/category.service';
+import { DocCategory } from '../../doc/doc-category.service';
 import { DocPage } from '../../doc/doc-page.service';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';

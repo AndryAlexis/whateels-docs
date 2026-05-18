@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 import { Section } from './section/section';
 import { Logo } from '../logo/logo';
 import { LeftSidebarService } from '../services/leftsidebar.service';
-import { DocCategory } from '../../doc/category.service';
+import { DocCategory } from '../../doc/doc-category.service';
 
 @Component({
   selector: 'app-left-sidebar',

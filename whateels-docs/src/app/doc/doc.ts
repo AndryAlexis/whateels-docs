@@ -6,7 +6,7 @@ import { Header } from '../shared/header/header';
 import { Main } from '../shared/main/main';
 import { LeftSidebar } from '../shared/left-sidebar/left-sidebar';
 import { SearchModal } from '../shared/search-modal/search-modal';
-import { CategoryService, DocCategory } from './category.service';
+import { CategoryService, DocCategory } from './doc-category.service';
 import { AuthService } from '../auth-callback/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { DEFAULT_DOC_SLUG, DocPage, DocPageService } from './doc-page.service';
