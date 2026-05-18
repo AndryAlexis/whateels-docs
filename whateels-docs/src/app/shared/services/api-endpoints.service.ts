@@ -19,13 +19,9 @@ export class ApiEndpointsService {
     );
   }
 
-  get page(): string {
-    return `${this.apiBaseUrl}/page`;
-  }
-
   async getPage(slug: string): Promise<DocPage> {
     return firstValueFrom(
-      this.http.get<DocPage>(`${this.page}/${encodeURIComponent(slug)}`)
+      this.http.get<DocPage>(`${this.apiBaseUrl}/page/${encodeURIComponent(slug)}`)
     );
   }
 }

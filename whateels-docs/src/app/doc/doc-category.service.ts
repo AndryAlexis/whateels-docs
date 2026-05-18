@@ -15,7 +15,6 @@ export class CategoryService {
   private readonly apiEndpoints = inject(ApiEndpointsService);
 
   async getCategories(): Promise<DocCategory[]> {
-    const categories = await this.apiEndpoints.getCategories();
-    return categories;
+    return await this.apiEndpoints.getCategories();
   }
 }

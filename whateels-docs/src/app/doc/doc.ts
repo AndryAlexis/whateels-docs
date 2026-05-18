@@ -64,8 +64,6 @@ export class Doc {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-
-    console.log('Doc component running in browser. Fetching categories...');
     this.fetchCategories();
   }
 
@@ -73,7 +71,6 @@ export class Doc {
     this.loading.set(true);
     this.error.set(null);
     this.categoryService.getCategories().then((categories) => {
-      console.log('Categories fetched successfully:', categories);
       this.loading.set(false);
       this.categories.set(categories);
     }).catch((err) => {
