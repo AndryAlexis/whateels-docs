@@ -13,53 +13,37 @@
             </li>
         </ul>
         <ul>
-            <li>
-                <app-section 
-                    [title]="'Introduction'" 
-                    [items]="[
-                        { name: 'Getting Started', href: '#', isActive: false },
-                        { name: 'Installation', href: '#', isActive: true },
-                    ]"
-                ></app-section>
-            </li>
-            <li>
-                <app-section 
-                    [title]="'Core Concepts'" 
-                    [items]="[
-                        { name: 'Understanding caching', href: '#' },
-                        { name: 'Predicting user behavior', href: '#' },
-                        { name: 'Basics of time-travel', href: '#' },
-                        { name: 'Introduction to string theory', href: '#' },
-                        { name: 'The butterfly effect', href: '#' },
-                    ]"
-                ></app-section>
-            </li>
-            <li>
-                <app-section 
-                    [title]="'Advanced guides'" 
-                    [items]="[
-                        { name: 'Writing plugins', href: '#', isActive: false },
-                        { name: 'Neuralink integration', href: '#', isActive: false },
-                        { name: 'Temporal paradoxes', href: '#', isActive: false },
-                        { name: 'Testing', href: '#', isActive: false },
-                        { name: 'Compile-time caching', href: '#', isActive: false },
-                        { name: 'Predictive data generation', href: '#', isActive: false },
-                    ]"
-                ></app-section>
-            </li>
-            <li>
-                <app-section 
-                    [title]="'API reference'" 
-                    [items]="[
-                        { name: 'CacheAdvance.predict()', href: '#', isActive: false },
-                        { name: 'CacheAdvance.flush()', href: '#', isActive: false },
-                        { name: 'CacheAdvance.reset()', href: '#', isActive: false },
-                        { name: 'CacheAdvance.status()', href: '#', isActive: false },
-                        { name: 'CacheAdvance.configure()', href: '#', isActive: false },
-                        { name: 'CacheAdvance.optimize()', href: '#', isActive: false },
-                    ]"
-                ></app-section>
-            </li>
+            @if (loading) {
+                <li class="sidebar-loading">
+                    <app-section
+                        [title]="'Loading categories...'"
+                        [items]="[]"
+                    ></app-section>
+                </li>
+            }
+            @else if (error) {
+                <li class="sidebar-error">
+                    <span>{{ error }}</span>
+                </li>
+            }
+            @else if (categories?.length) {
+                @for (category of categories; track $index) {
+                    <li>
+                        <app-section
+                            [title]="category.title"
+                            [items]="pageItems(category)"
+                        ></app-section>
+                    </li>
+                }
+            }
+            @else {
+                <li>
+                    <app-section
+                        [title]="'Documentation'"
+                        [items]="[]"
+                    ></app-section>
+                </li>
+            }
         </ul>
     </nav>
 </aside>

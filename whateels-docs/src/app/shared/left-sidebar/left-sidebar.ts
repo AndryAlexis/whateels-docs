@@ -21,6 +21,9 @@ export class LeftSidebar {
 
   @Input() categories: DocCategory[] | null = null;
 
+  @Input() loading: boolean = false;
+  @Input() error: string | null = null;
+
   pageItems(category: DocCategory): { name: string; href: string; isActive?: boolean }[] {
     return category.pages.map((page) => ({
       name: page.title,
