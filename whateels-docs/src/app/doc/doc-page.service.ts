@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 
 export type DocSection = {
     id: string;
@@ -20,9 +20,9 @@ export const DEFAULT_DOC_SLUG = 'Getting Started';
 
 @Injectable({ providedIn: 'root' })
 export class DocPageService {
-  private readonly http = inject(HttpClient);
+  private readonly apiEndpoints = inject(ApiEndpointsService);
 
-  getPage(slug: string) {
-    return this.http.get<DocPage>(`/api/pages/${encodeURIComponent(slug)}`);
+  async getPage(slug: string): Promise<DocPage> {
+    return this.apiEndpoints.getPage(slug);
   }
 }

@@ -1,10 +1,12 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { Section } from './section/section';
 import { Logo } from '../logo/logo';
 import { LeftSidebarService } from '../services/leftsidebar.service';
+import { DocCategory } from '../../doc/category.service';
 
 @Component({
   selector: 'app-left-sidebar',
+  standalone: true,
   imports: [Section, Logo],
   templateUrl: './left-sidebar.html',
   styleUrl: './left-sidebar.css',
@@ -15,5 +17,14 @@ export class LeftSidebar {
   @HostBinding('class.active')
   get isActive(): boolean {
     return this.leftSidebarService.isOpen();
+  }
+
+  @Input() categories: DocCategory[] | null = null;
+
+  pageItems(category: DocCategory): { name: string; href: string; isActive?: boolean }[] {
+    return category.pages.map((page) => ({
+      name: page.title,
+      href: `/docs/${page.slug}`,
+    }));
   }
 }

@@ -77,7 +77,6 @@ export class AuthService {
 
   hasValidAccessToken(): boolean {
     const token = this.getAccessToken();
-    console.log('Checking token validity. Token found:', token);
     if (!token) {
       return false;
     }

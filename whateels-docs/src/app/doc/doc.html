@@ -1,8 +1,19 @@
 <app-header></app-header>
 <div class="wrapper">
-    <app-left-sidebar></app-left-sidebar>
+    <app-left-sidebar [categories]="categories()"></app-left-sidebar>
     @if (pageState$ | async; as state) {
         <app-main [page]="state.page" [loading]="state.loading" [error]="state.error"></app-main>
     }
 </div>
 <app-search-modal></app-search-modal>
+<!-- <app-modal>
+    <div>
+        <i class="fa-regular fa-circle-xmark"></i>
+        <h2>Modal Title</h2>
+        <p>This is the content of the modal.</p>
+
+        <button>
+            Close Modal
+        </button>
+    </div>
+</app-modal> -->

@@ -17,4 +17,46 @@
         padding: 0;
         margin: 0;
     }
+
+    & app-modal {
+
+        & div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+
+            padding: 2rem;
+            & h2 {
+                color: var(--ui-accent-dark);
+                font-size: 1.5rem;
+            }
+            & p {
+                color: var(--ui-accent-normal);
+                font-size: 1rem;
+            }
+        }
+
+        & i {
+            font-size: 3rem;
+            color: red;
+        }
+
+        & button {
+            border: none;
+            cursor: pointer;
+            padding: .5rem 1rem;
+            border-radius: 5px;
+            background-color: green;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+            margin-top: 1rem;
+
+            &:hover {
+                background-color: darkgreen;
+            }
+        }
+    }
 }
