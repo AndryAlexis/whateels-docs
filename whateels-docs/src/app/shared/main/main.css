@@ -1,6 +1,5 @@
 :host {
-    display: flex;
-    flex-grow: 1;
+    display: contents;
     
     & > div {
         height: inherit;

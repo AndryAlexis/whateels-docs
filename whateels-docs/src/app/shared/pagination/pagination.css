@@ -1,7 +1,7 @@
 :host {
     display: flex;
     font-family: "Lexend", sans-serif;
-    padding: 0 2rem var(--margin-header-content) 2rem;
+    padding: 0 2rem;
 
     & nav.prev-and-next-links {
         display: flex;
