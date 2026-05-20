@@ -4,6 +4,7 @@ import { Logo } from '../logo/logo';
 import { SearchButton } from './search-button/search-button';
 import { LeftSidebarService } from '../services/leftsidebar.service';
 import { FloatingMenu } from '../services/floating-menu.service';
+import { ApiEndpointsService } from '../services/api-endpoints.service';
 import { AuthService } from '../../auth-callback/auth.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class Header {
   constructor(
     public leftSidebarService: LeftSidebarService,
     public floatingMenu: FloatingMenu,
-    public auth: AuthService
+    public auth: AuthService,
+    public apiEndpoints: ApiEndpointsService
   ) {}
 }

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { Header } from '../shared/header/header';
@@ -55,10 +55,6 @@ export class Doc {
       )
     )
   );
-
-  constructor() {
-    console.log('Doc component initialized.');
-  }
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {

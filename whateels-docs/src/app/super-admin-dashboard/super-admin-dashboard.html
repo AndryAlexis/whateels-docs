@@ -1,2 +1,8 @@
 <h1>Super Admin Dashboard</h1>
 <p>Welcome, super admin!</p>
+<button type="button" (click)="logout()" [disabled]="isLoggingOut()">
+	{{ isLoggingOut() ? 'Logging out...' : 'Logout' }}
+</button>
+@if (logoutError(); as message) {
+	<p>{{ message }}</p>
+}

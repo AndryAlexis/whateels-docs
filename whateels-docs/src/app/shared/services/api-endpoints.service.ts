@@ -13,6 +13,10 @@ export class ApiEndpointsService {
 
   constructor(private http: HttpClient) {}
 
+  getGitHubLoginUrl(): string {
+    return `${this.apiBaseUrl}/auth/github/login`;
+  }
+
   async getCategories(): Promise<DocCategory[]> {
     return firstValueFrom(
       this.http.get<DocCategory[]>(`${this.apiBaseUrl}/category`)
@@ -22,6 +26,14 @@ export class ApiEndpointsService {
   async getPage(slug: string): Promise<DocPage> {
     return firstValueFrom(
       this.http.get<DocPage>(`${this.apiBaseUrl}/page/${encodeURIComponent(slug)}`)
+    );
+  }
+
+  async revokeGitHubToken(accessToken: string): Promise<void> {
+    await firstValueFrom(
+      this.http.post<void>(`${this.apiBaseUrl}/auth/github/logout`, null, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
     );
   }
 }

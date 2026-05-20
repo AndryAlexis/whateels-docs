@@ -1,5 +1,6 @@
 
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 type AppJwtPayload = JwtPayload & {
@@ -107,7 +108,17 @@ export class AuthService {
     return Number(payload.roleCode ?? payload.role_code ?? payload.roleId ?? payload.role ?? 0);
   }
 
-  logout(): void {
+  private readonly apiEndpoints = inject(ApiEndpointsService);
+
+  async logout(): Promise<void> {
+    const token = this.getAccessToken();
+    if (token) {
+      try {
+        await this.apiEndpoints.revokeGitHubToken(token);
+      } catch {
+        // Revocation failed — still clear locally so the user is logged out
+      }
+    }
     this.clearAccessToken();
   }
 }
