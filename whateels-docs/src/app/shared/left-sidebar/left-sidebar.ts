@@ -19,8 +19,9 @@ export class LeftSidebar {
   constructor(public leftSidebarService: LeftSidebarService) {}
 
   private get currentSlug(): string {
-    const urlSlug = this.router.url.split('/').filter(Boolean)[0];
-    return urlSlug ?? DEFAULT_DOC_SLUG;
+    const tree = this.router.parseUrl(this.router.url);
+    const urlSlug = tree.root.children['primary']?.segments[0]?.path;
+    return urlSlug || DEFAULT_DOC_SLUG;
   }
 
   @HostBinding('class.active')
