@@ -1,0 +1,20 @@
+<h1>User Dashboard</h1>
+<p>Welcome, regular user!</p>
+<div class="dashboard-actions">
+	<button
+		type="button"
+		aria-label="Change GitHub Account"
+		(click)="changeGitHubAccount()"
+		[disabled]="isChangingAccount()"
+	>
+		{{ isChangingAccount() ? 'Redirecting...' : 'Change GitHub Account' }}
+	</button>
+	<p class="helper-text">Use this if GitHub keeps signing in with the wrong account.</p>
+
+	<button type="button" (click)="logout()" [disabled]="isLoggingOut()">
+		{{ isLoggingOut() ? 'Logging out...' : 'Logout' }}
+	</button>
+</div>
+@if (logoutError(); as message) {
+	<p>{{ message }}</p>
+}
