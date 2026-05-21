@@ -74,7 +74,24 @@
 
     & nav.partner-affiliations {
         display: flex;
-        gap: 2rem;
+
+        & ul {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+
+            & li a:hover {
+                opacity: 0.8;
+            }
+
+            & img {
+                max-width: 90px;
+                width: 100%;
+                height: auto;
+
+            }
+        }
     }
 }
 
