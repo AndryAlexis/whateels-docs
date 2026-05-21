@@ -64,8 +64,6 @@ export class SearchModal {
         this.results.set(newResults);
         this.selectedIndex.set(newResults.length > 0 ? 0 : -1);
         this.isLoading.set(false);
-
-        console.log('Search results for query:', this.searchQuery, this.results());
       });
 
     effect(() => {

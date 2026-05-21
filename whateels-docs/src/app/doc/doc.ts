@@ -10,7 +10,7 @@ import { CategoryService, DocCategory } from './doc-category.service';
 import { AuthService } from '../auth-callback/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { DEFAULT_DOC_SLUG, DocPage, DocPageService } from './doc-page.service';
-import { catchError, of, from, map, startWith, switchMap } from 'rxjs';
+import { catchError, of, from, map, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-doc',
@@ -53,7 +53,15 @@ export class Doc {
           })
         )
       )
-    )
+    ),
+    tap((state) => {
+      if (!state.loading && state.page && isPlatformBrowser(this.platformId)) {
+        const fragment = this.route.snapshot.fragment;
+        if (fragment) {
+          setTimeout(() => document.getElementById(fragment)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+        }
+      }
+    })
   );
 
   ngOnInit(): void {
