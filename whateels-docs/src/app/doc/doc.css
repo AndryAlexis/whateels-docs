@@ -60,3 +60,9 @@
         }
     }
 }
+
+@media (width <= 1024px) {
+    :host .wrapper {
+        justify-content: center;
+    }
+}

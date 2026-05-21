@@ -6,6 +6,9 @@
     & footer {
         flex: 1;
         flex-direction: column;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
 
     & > nav {
@@ -67,6 +70,11 @@
                 }
             }
         }
+    }
+
+    & nav.partner-affiliations {
+        display: flex;
+        gap: 2rem;
     }
 }
 
