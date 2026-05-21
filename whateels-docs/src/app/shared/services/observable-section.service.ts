@@ -16,15 +16,26 @@ export class ObservableSectionService {
     }
 
     const root = document.documentElement;
-    const headerHeight = getComputedStyle(root)
-      .getPropertyValue('--header-height')
-      .trim();
-    const headerHeightPx = parseFloat(headerHeight) * 16;
-    const topMargin = -headerHeightPx;
+    const style = getComputedStyle(root);
+    const toPx = (value: string): number => {
+      const v = value.trim();
+      if (v.endsWith('rem')) return parseFloat(v) * 16;
+      return parseFloat(v);
+    };
+
+    const headerHeightPx = toPx(style.getPropertyValue('--header-height'));
+    const contentMarginPx = toPx(style.getPropertyValue('--margin-header-content'));
+    const topOffsetPx = headerHeightPx + contentMarginPx;
+    const topMargin = -topOffsetPx;
+
+    // Keep only a very small detection band at the exact top offset line.
+    const viewportHeightPx = window.innerHeight || document.documentElement.clientHeight;
+    const bandHeightPx = 1;
+    const bottomMargin = -Math.max(1, viewportHeightPx - topOffsetPx - bandHeightPx);
 
     const options = {
       root: null,
-      rootMargin: `${topMargin}px 0px -66% 0px`,
+      rootMargin: `${topMargin}px 0px ${bottomMargin}px 0px`,
       threshold: 0,
     };
 

@@ -13,8 +13,9 @@
             }
             @else {
                 @for (section of sections(); track section.id) {
+                    @let slug = section.heading | slugify;
                     <li>
-                        <a [href]="'#' + fragmentId(section.id)" [class.active]="isActive(fragmentId(section.id))">{{ section.heading }}</a>
+                        <a [routerLink]="[]" [fragment]="slug" [class.active]="isActive(slug)">{{ section.heading }}</a>
                     </li>
                 }
             }

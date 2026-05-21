@@ -33,7 +33,7 @@
                 <section>
                     <div>
                         <section>
-                            <h2 [id]="section.id" appObservableSection>
+                            <h2 [id]="section.heading | slugify" appObservableSection>
                                 {{ section.heading }}
                             </h2>
                             @for (paragraph of section.paragraphs; track $index) {
@@ -44,10 +44,6 @@
                         </section>
                     </div>
                 </section>
-                <!-- 
-                @if (!last) {
-                    <app-divider></app-divider>
-                } -->
                 <app-divider></app-divider>
             }
         }

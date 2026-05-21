@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +11,17 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('whateels-docs');
+
+  constructor() {
+    const platformId = inject(PLATFORM_ID);
+    if (isPlatformBrowser(platformId)) {
+      const router = inject(Router);
+      router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
+        const fragment = router.parseUrl(router.url).fragment;
+        if (fragment) {
+          document.getElementById(fragment)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
+  }
 }

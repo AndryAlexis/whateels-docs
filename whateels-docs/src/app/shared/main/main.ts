@@ -4,11 +4,12 @@ import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
 import { PaginationComponent } from '../pagination/pagination';
 import { ObservableSectionDirective } from '../directives/observable-section.directive';
+import { SlugifyPipe } from '../pipes/slugify.pipe';
 import { DocPage } from '../../doc/doc-page.service';
 
 @Component({
   selector: 'app-main',
-  imports: [RightSidebar, Footer, Divider, PaginationComponent, ObservableSectionDirective],
+  imports: [RightSidebar, Footer, Divider, PaginationComponent, ObservableSectionDirective, SlugifyPipe],
   templateUrl: './main.html',
   styleUrl: './main.css',
 })
