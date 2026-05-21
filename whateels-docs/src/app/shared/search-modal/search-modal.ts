@@ -19,12 +19,14 @@ import {
   SearchResultItem,
 } from '../services/api-endpoints.service';
 import { SearchModalService } from '../services/search-modal.service';
+import { SlugifyPipe } from '../pipes/slugify.pipe';
 
-const SEARCH_LIMIT = 10;
+const SEARCH_LIMIT = 5;
 
 @Component({
   selector: 'app-search-modal',
   imports: [FormsModule, RouterLink],
+  providers: [SlugifyPipe],
   templateUrl: './search-modal.html',
   styleUrl: './search-modal.css',
 })
@@ -34,6 +36,7 @@ export class SearchModal {
   private readonly router = inject(Router);
   private readonly apiEndpoints = inject(ApiEndpointsService);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly slugify = inject(SlugifyPipe);
   private readonly searchStream$ = new Subject<string>();
 
   searchQuery = '';
@@ -61,6 +64,8 @@ export class SearchModal {
         this.results.set(newResults);
         this.selectedIndex.set(newResults.length > 0 ? 0 : -1);
         this.isLoading.set(false);
+
+        console.log('Search results for query:', this.searchQuery, this.results());
       });
 
     effect(() => {
@@ -103,6 +108,12 @@ export class SearchModal {
 
   resultSubtitle(item: SearchResultItem): string {
     return item.type === 'section' ? item.section!.heading : '';
+  }
+
+  resultFragment(item: SearchResultItem): string | undefined {
+    return item.type === 'section' && item.section
+      ? this.slugify.transform(item.section.heading)
+      : undefined;
   }
 
   trackResult(item: SearchResultItem): string {
@@ -156,7 +167,7 @@ export class SearchModal {
 
   navigateTo(item: SearchResultItem): void {
     this.searchModalService.close();
-    this.router.navigate([item.page.slug]);
+    this.router.navigate(['/', item.page.slug], { fragment: this.resultFragment(item) });
   }
 
   private reset(): void {

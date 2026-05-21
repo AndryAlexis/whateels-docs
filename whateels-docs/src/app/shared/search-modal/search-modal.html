@@ -36,7 +36,7 @@
                                 [attr.aria-selected]="i === selectedIndex()"
                                 (mouseenter)="onResultHover(i)"
                             >
-                                <a [routerLink]="[item.page.slug]" (click)="searchModalService.close()">
+                                <a [routerLink]="['/', item.page.slug]" [fragment]="resultFragment(item)" (click)="searchModalService.close()">
                                     <p>{{ resultTitle(item) }}</p>
                                     @if (resultSubtitle(item)) {
                                         <p>{{ resultSubtitle(item) }}</p>
