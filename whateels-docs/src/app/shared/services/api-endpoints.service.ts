@@ -3,7 +3,31 @@ import { HttpClient } from '@angular/common/http';
 import { DocCategory } from '../../doc/doc-category.service';
 import { DocPage } from '../../doc/doc-page.service';
 import { environment } from '../../../environments/environment';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
+
+export type SearchResultPageRef = {
+  id: number;
+  slug: string;
+  title: string;
+};
+
+export type SearchResultSection = {
+  id: number;
+  heading: string;
+};
+
+export type SearchResultItem = {
+  type: 'page' | 'section';
+  page: SearchResultPageRef;
+  section: SearchResultSection | null;
+};
+
+export type SearchApiResponse = {
+  query: string;
+  limit: number;
+  count: number;
+  results: SearchResultItem[];
+};
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +59,11 @@ export class ApiEndpointsService {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
     );
+  }
+
+  searchDocs(query: string, limit: number): Observable<SearchApiResponse> {
+    return this.http.get<SearchApiResponse>(`${this.apiBaseUrl}/search`, {
+      params: { q: query, limit },
+    });
   }
 }

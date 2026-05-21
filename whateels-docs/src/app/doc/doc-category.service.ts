@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 
 export interface DocCategory {
-  id: string;
+  id: number;
   title: string;
   pages: Array<{
     title: string;

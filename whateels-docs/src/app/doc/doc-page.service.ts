@@ -33,7 +33,7 @@ export type DocPage = {
 
 type RawDocPage = Omit<DocPage, 'category'> & {
   category: {
-    id: number | string;
+    id: number;
     title: string;
     pages?: Array<{
       title: string;
@@ -53,7 +53,7 @@ export class DocPageService {
     return {
       ...page,
       category: {
-        id: String(page.category.id),
+        id: page.category.id,
         title: page.category.title,
         pages: page.category.pages ?? [],
       },

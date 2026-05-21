@@ -1,46 +1,59 @@
 <div class="search-container">
     <div class="search-input">
-        <i class="fas fa-search"></i>
-        <input 
-            #searchInput 
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onSearchQueryChange()"
-            type="text" 
-            placeholder="Find something..." autofocus
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <input
+            #searchInput
+            [ngModel]="searchQuery"
+            (input)="onSearchInput($event)"
+            (keydown)="onKeydown($event)"
+            type="text"
+            placeholder="Find something..."
+            autocomplete="off"
+            role="combobox"
+            aria-label="Search documentation"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+            aria-controls="search-results-list"
+            [attr.aria-activedescendant]="selectedResultOptionId"
         />
     </div>
     <div class="search-results">
-        @if (hasSearchQuery) {
-            @if (hasFilteredResults) {
-            <nav class="results" (mouseleave)="onResultsMouseLeave()">
-                <ul>
-                    @for (item of filteredResultItems; track item.id) {
-                        <li
-                            class="result-item"
-                            [attr.aria-selected]="item.selected"
-                            (mouseenter)="onResultHover(item.id)"
-                        >
-                            <a href="#">
-                                <p>
-                                    {{ item.title }}
-                                </p>
-                                <p>
-                                    {{ item.subtitle }}
-                                </p>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </nav>
-            } @else {
-            <div class="no-results">
-                <p>
-                    No results found...
-                </p>
-                <i class="fa-regular fa-face-frown"></i>
-            </div>
+        @if (hasQuery) {
+            @if (isLoading()) {
+                <div class="no-results">
+                    <p>Searching...</p>
+                    <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+                </div>
+            }
+            @if (hasResults()) {
+                <nav class="results" (mouseleave)="onResultsMouseLeave()">
+                    <ul id="search-results-list" role="listbox" aria-label="Search results">
+                        @for (item of results(); track trackResult(item); let i = $index) {
+                            <li
+                                class="result-item"
+                                role="option"
+                                [id]="resultOptionId(i)"
+                                [attr.aria-selected]="i === selectedIndex()"
+                                (mouseenter)="onResultHover(i)"
+                            >
+                                <a [routerLink]="[item.page.slug]" (click)="searchModalService.close()">
+                                    <p>{{ resultTitle(item) }}</p>
+                                    @if (resultSubtitle(item)) {
+                                        <p>{{ resultSubtitle(item) }}</p>
+                                    }
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            } 
+            @if (!hasResults() && !isLoading()) {
+                <div class="no-results">
+                    <p>No results found...</p>
+                    <i class="fa-regular fa-face-frown" aria-hidden="true"></i>
+                </div>
             }
         }
     </div>
 </div>
-<div class="background" (click)="searchModalService.close()"></div>
+<div class="background" (click)="searchModalService.close()" aria-hidden="true"></div>
