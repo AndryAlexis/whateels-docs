@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth-callback/auth.service';
+import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -10,8 +11,11 @@ import { AuthService } from '../auth-callback/auth.service';
 export class AdminDashboardComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly apiEndpoints = inject(ApiEndpointsService);
 
+  private readonly changeAccountMode: 'logout' | 'authorize' | null = null;
   readonly isLoggingOut = signal(false);
+  readonly isChangingAccount = signal(false);
   readonly logoutError = signal<string | null>(null);
 
   async logout(): Promise<void> {
@@ -25,5 +29,26 @@ export class AdminDashboardComponent {
     } finally {
       this.isLoggingOut.set(false);
     }
+  }
+
+  changeGitHubAccount(): void {
+    if (this.isChangingAccount()) {
+      return;
+    }
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const confirmed = window.confirm('You will be redirected to GitHub to switch accounts.');
+    if (!confirmed) {
+      return;
+    }
+
+    this.isChangingAccount.set(true);
+
+    const baseUrl = `${this.apiEndpoints.apiBaseUrl}/auth/github/login/change-account`;
+    const url = this.changeAccountMode ? `${baseUrl}?mode=${this.changeAccountMode}` : baseUrl;
+    window.location.href = url;
   }
 }

@@ -1,12 +1,25 @@
 :host { display: block; padding: 2rem; }
 
-button {
+.dashboard-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: .75rem;
 	margin-top: 1rem;
+}
+
+button {
 	padding: .6rem 1rem;
 	border: 1px solid #d0d5dd;
 	border-radius: .5rem;
 	background: #fff;
 	cursor: pointer;
+}
+
+.helper-text {
+	margin: 0;
+	color: #667085;
+	font-size: .9rem;
 }
 
 button:disabled {
