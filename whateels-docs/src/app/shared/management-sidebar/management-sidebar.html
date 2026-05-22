@@ -1,0 +1,22 @@
+<aside>
+    <nav>
+        <ul class="mobile-menu-header">
+            <li>
+                <button class="close-button" (click)="managementSidebarService.close()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </li>
+            <li>
+                <a href="/">
+                    <app-logo [width]="30" [height]="30"></app-logo>
+                </a>
+            </li>
+        </ul>
+        <ul>
+            <li class="sidebar-loading">
+
+            </li>
+        </ul>
+    </nav>
+</aside>
+<div class="background" (click)="managementSidebarService.close()"></div>

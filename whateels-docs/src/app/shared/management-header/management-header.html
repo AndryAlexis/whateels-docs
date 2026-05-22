@@ -1,0 +1,40 @@
+<nav>
+    <ul>
+        <li>
+            <button class="menu-button" (click)="managementSidebarService.open()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </li>
+        <li>
+            <a href="./">
+                <app-logo [width]="30" [height]="30"></app-logo>
+            </a>
+        </li>
+        <li>
+            <ul class="extra-options">
+                <li>
+                    <a href="https://download-whateels-9k5k.onrender.com/" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </li>
+                <li>
+                    <div class="floating-menu-container">
+                        <button (click)="managementFloatingMenuService.toggle()">
+                            <i class="fa-regular fa-user"></i>
+                        </button>
+                        @if (managementFloatingMenuService.isOpen()) {
+                            <div class="floating-menu">
+                                <a href="#">
+                                    <span>
+                                        Login with Github 
+                                    </span>
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>

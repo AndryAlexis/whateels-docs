@@ -1,0 +1,33 @@
+:host {
+    display: contents;
+    
+    & > div {
+        height: inherit;
+        flex-grow: 1;
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        & > main {
+            font-family: "Lexend", sans-serif;
+            flex: 1;
+
+            padding: var(--margin-header-content) 2rem 0 2rem;
+            background-color: cyan;
+        }
+    }
+}
+
+@media (width <= 1024px) {
+    :host {
+        justify-content: center;
+
+        & > div {
+            & > main {
+                
+                padding: calc(var(--margin-header-content) / 2) .85rem 0 .85rem;
+            }
+        }
+    }
+}

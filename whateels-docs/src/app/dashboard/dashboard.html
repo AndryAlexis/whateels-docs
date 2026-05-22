@@ -1,16 +1,5 @@
-<app-header></app-header>
+<app-management-header></app-management-header>
 <div class="wrapper">
-    <app-left-sidebar
-        [categories]="categories()"
-        [loading]="loading()"
-        [error]="error()"
-    ></app-left-sidebar>
-    @if (pageState$ | async; as state) {
-        <app-main 
-            [page]="state.page" 
-            [loading]="state.loading" 
-            [error]="state.error"
-        ></app-main>
-    }
+    <app-management-sidebar></app-management-sidebar>
+    <app-management-main></app-management-main>
 </div>
-<app-search-modal></app-search-modal>
