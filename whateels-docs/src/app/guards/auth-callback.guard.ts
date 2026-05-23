@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { TokenExpiryService } from './token-expiry.service';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
+import { TokenExpiryService } from '../shared/services/token-expiry.service';
 
-export const authCallbackGuard = () => {
+export const authCallbackGuard: CanActivateFn = () => {
     const router = inject(Router);
     const authService = inject(AuthService);
     const tokenExpiryService = inject(TokenExpiryService);
@@ -27,23 +27,17 @@ export const authCallbackGuard = () => {
         window.history.replaceState({}, document.title, '/auth/callback');
 
         const roleCode = authService.getRoleCode(token);
-        if (roleCode === 1) {
-            router.navigateByUrl('/super-admin');
-        } else if (roleCode === 2) {
-            router.navigateByUrl('/admin');
+        if (roleCode === 2 || roleCode === 1) {
+            return router.createUrlTree(['/admin']);
         } else {
-            router.navigateByUrl('/dashboard');
+            return router.createUrlTree(['/dashboard']);
         }
 
-        return false;
-
-        } catch (e) {
+        } catch {
             authService.clearAccessToken();
-            router.navigateByUrl('/?error=token_invalid');
-            return false;
+            return router.createUrlTree(['/'], { queryParams: { error: 'token_invalid' } });
         }
     } else {
-        router.navigateByUrl('/?error=no_token');
-        return false;
+        return router.createUrlTree(['/'], { queryParams: { error: 'no_token' } });
     }
 };

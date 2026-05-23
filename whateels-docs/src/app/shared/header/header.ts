@@ -5,7 +5,7 @@ import { SearchButton } from './search-button/search-button';
 import { LeftSidebarService } from '../services/leftsidebar.service';
 import { FloatingMenu } from '../services/floating-menu.service';
 import { ApiEndpointsService } from '../services/api-endpoints.service';
-import { AuthService } from '../../auth-callback/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',

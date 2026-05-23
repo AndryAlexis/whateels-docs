@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth-callback/auth.service';
+import { AuthService } from '../shared/services/auth.service';
 import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 
 @Component({

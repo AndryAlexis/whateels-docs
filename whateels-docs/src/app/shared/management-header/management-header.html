@@ -13,22 +13,23 @@
         <li>
             <ul class="extra-options">
                 <li>
-                    <a href="https://download-whateels-9k5k.onrender.com/" target="_blank" rel="noopener noreferrer">
-                        <i class="fa-solid fa-download"></i>
-                    </a>
-                </li>
-                <li>
                     <div class="floating-menu-container">
                         <button (click)="managementFloatingMenuService.toggle()">
-                            <i class="fa-regular fa-user"></i>
+                            <img [src]="'https://avatars.githubusercontent.com/u/' + authService.getGithubId() + '?v=4&size=64'" alt="Github Avatar" class="avatar">
                         </button>
                         @if (managementFloatingMenuService.isOpen()) {
                             <div class="floating-menu">
                                 <a href="#">
                                     <span>
-                                        Login with Github 
+                                        Switch
                                     </span>
-                                    <i class="fa-brands fa-github"></i>
+                                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                                </a>
+                                <a href="#">
+                                    <span>
+                                        Logout
+                                    </span>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
                                 </a>
                             </div>
                         }

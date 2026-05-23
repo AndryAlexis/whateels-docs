@@ -1,8 +1,8 @@
 import { Doc } from './doc/doc';
 import { AuthCallbackComponent } from './auth-callback/auth-callback';
-import { authCallbackGuard } from './auth-callback/auth-callback.guard';
+import { authCallbackGuard } from './guards/auth-callback.guard';
 import { Routes } from '@angular/router';
-import { authGuard } from './auth-callback/auth.guard';
+import { authGuard } from './guards/auth.guard';
 import { Dashboard } from './dashboard/dashboard';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { SuperAdminDashboardComponent } from './super-admin-dashboard/super-admin-dashboard';

@@ -1,6 +1,6 @@
 
 import { Injectable, inject, signal } from '@angular/core';
-import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
+import { ApiEndpointsService } from './api-endpoints.service';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 type AppJwtPayload = JwtPayload & {
@@ -24,8 +24,7 @@ export class AuthService {
    */
   getDashboardRoute(): string {
     const role = this.getRoleCode();
-    if (role === 1) return '/super-admin';
-    if (role === 2) return '/admin';
+    if (role === 2 || role === 1) return '/admin';
     return '/dashboard';
   }
 
@@ -106,6 +105,24 @@ export class AuthService {
     }
 
     return Number(payload.roleCode ?? payload.role_code ?? payload.roleId ?? payload.role ?? 0);
+  }
+
+  getGithubId(token?: string): number | null {
+    const sourceToken = token ?? this.getAccessToken();
+    if (!sourceToken) {
+      return null;
+    }
+
+    const payload = this.decodeToken(sourceToken);
+    if (!payload) {
+      return null;
+    }
+
+    const { github_user_id } = payload as any;
+    if (!github_user_id) {
+      return null;
+    }
+    return github_user_id;
   }
 
   private readonly apiEndpoints = inject(ApiEndpointsService);
