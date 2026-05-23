@@ -1,7 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../shared/services/auth.service';
-import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
 
 @Component({
   selector: 'app-super-admin-dashboard',
@@ -9,26 +6,15 @@ import { ApiEndpointsService } from '../shared/services/api-endpoints.service';
   styleUrl: './super-admin-dashboard.css'
 })
 export class SuperAdminDashboardComponent {
-  private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly apiEndpoints = inject(ApiEndpointsService);
-
-  private readonly changeAccountMode: 'logout' | 'authorize' | null = null;
   readonly isLoggingOut = signal(false);
   readonly isChangingAccount = signal(false);
-  readonly logoutError = signal<string | null>(null);
 
-  async logout(): Promise<void> {
-    this.logoutError.set(null);
+  logout(): void {
     this.isLoggingOut.set(true);
-    try {
-      await this.authService.logout();
-      await this.router.navigate(['/']);
-    } catch {
-      this.logoutError.set('Unable to complete logout. Please try again.');
-    } finally {
-      this.isLoggingOut.set(false);
+    if (typeof window === 'undefined') {
+      return;
     }
+    window.location.assign('/auth/callback?action=logout');
   }
 
   changeGitHubAccount(): void {
@@ -46,9 +32,6 @@ export class SuperAdminDashboardComponent {
     }
 
     this.isChangingAccount.set(true);
-
-    const baseUrl = `${this.apiEndpoints.apiBaseUrl}/auth/github/login/change-account`;
-    const url = this.changeAccountMode ? `${baseUrl}?mode=${this.changeAccountMode}` : baseUrl;
-    window.location.href = url;
+    window.location.assign('/auth/callback?action=change-account');
   }
 }
