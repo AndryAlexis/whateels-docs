@@ -9,29 +9,29 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
+                        <th>Slug</th>
+                        <th>Title</th>
+                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>John Doe</td>
-                        <td>john.doe@example.com</td>
-                        <td>Admin</td>
+                        <td>home</td>
+                        <td>Home Page</td>
+                        <td>Main</td>
                         <td>
-                            <button type="button" aria-label="Edit User">Edit</button>
+                            <button type="button" aria-label="Edit Page">Edit</button>
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Jane Smith</td>
-                        <td>jane.smith@example.com</td>
-                        <td>User</td>
+                        <td>about</td>
+                        <td>About Page</td>
+                        <td>Main</td>
                         <td>
-                            <button type="button" aria-label="Edit User">Edit</button>
+                            <button type="button" aria-label="Edit Page">Edit</button>
                         </td>
                     </tr>
                     <tr>
@@ -75,9 +75,17 @@
             </table>
         </div>
         <div class="pagination-container">
-            <button type="button" aria-label="Previous Page">Previous</button>
-            <span>Page 1 of 10</span>
-            <button type="button" aria-label="Next Page">Next</button>
+            <a href="#" class="pagination-link" aria-label="Previous Page">
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
+            <ol class="pagination-list">
+                <li><a href="#" class="pagination-link">1</a></li>
+                <li><a href="#" class="pagination-link">2</a></li>
+                <li><a href="#" class="pagination-link">3</a></li>
+            </ol>
+            <a href="#" class="pagination-link" aria-label="Next Page">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
         </div>
     </main>
 </div>

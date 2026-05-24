@@ -85,6 +85,30 @@
                 }
             }
 
+            & > .pagination-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+
+                & .pagination-list {
+                    display: flex;
+                    gap: .5rem;
+
+                    & > li {
+                        padding: .5rem 1rem;
+                        border: 1px solid var(--ui-accent-light);
+                        border-radius: 7px;
+                        cursor: pointer;
+
+                        &.active {
+                            background-color: var(--ui-brand-secondary);
+                            color: white;
+                            border-color: var(--ui-brand-secondary);
+                        }
+                    }
+                }
+            }
         }
     }
 }
