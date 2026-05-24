@@ -1,6 +1,7 @@
 :host {
     display: contents;
-    
+    font-family: "Lexend", sans-serif;
+
     & > div {
         height: inherit;
         flex-grow: 1;
@@ -10,11 +11,80 @@
         flex-direction: column;
 
         & > main {
-            font-family: "Lexend", sans-serif;
             flex: 1;
+            display: flex;
+            flex-direction: column;
 
-            padding: var(--margin-header-content) 2rem 0 2rem;
-            background-color: cyan;
+            padding: var(--margin-header-content) 2rem var(--margin-header-content) 2rem;
+
+            gap: 1rem;
+
+            & > .search-input-container, & > .pagination-container {
+                display: flex;
+                justify-content: center;
+            }
+
+            & > .search-input-container {
+                position: relative;
+
+                & > i {
+                    position: absolute;
+                    left: .5rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: var(--ui-accent-light);
+                    pointer-events: none;
+                }
+                & > input {
+                    padding: .5rem 1.25rem .5rem 2rem;
+                    border: 1px solid var(--ui-accent-light);
+                    border-radius: 7px;
+                    width: 100%;
+                }
+            }
+
+            & > .table-container {
+                border-color: var(--ui-accent-light);
+                border-style: solid;
+                border-width: 0 0 1px 0;
+                display: flex;
+                flex-direction: column;
+                padding: 0%;
+                overflow-y: auto;
+
+                & table {
+                    overflow: clip;
+                    border-radius: 7px;
+
+                    & thead {
+                        background-color: var(--ui-brand-secondary);
+                        border-radius: 7px 7px 0 0;
+                        color: white;
+                    }
+
+                    & tbody {
+                        text-align: center;
+                        & tr:not(:last-child) {
+                            border-bottom: 1px solid var(--ui-accent-light);
+                        }
+
+                        & tr:hover {
+                            background-color: #f8fafc;
+                        }
+                    }
+
+                    & tr {
+                        & > td, & > th {
+                            padding: .75rem;
+                        }
+                    }
+                }
+
+                &:nth-child(2) {
+                    flex: 1;
+                }
+            }
+
         }
     }
 }
