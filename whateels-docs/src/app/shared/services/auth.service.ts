@@ -125,6 +125,38 @@ export class AuthService {
     return github_user_id;
   }
 
+  getGithubUsername(token?: string): string | null {
+    const sourceToken = token ?? this.getAccessToken();
+    if (!sourceToken) {
+      return null;
+    }
+    const payload = this.decodeToken(sourceToken);
+    if (!payload) {
+      return null;
+    }
+    const { github_username } = payload as any;
+    if (!github_username) {
+      return null;
+    }
+    return github_username;
+  }
+
+  getGithubDisplayName(token?: string): string | null {
+    const sourceToken = token ?? this.getAccessToken();
+    if (!sourceToken) {
+      return null;
+    }
+    const payload = this.decodeToken(sourceToken);
+    if (!payload) {
+      return null;
+    }
+    const { github_display_name } = payload as any;
+    if (!github_display_name) {
+      return null;
+    }
+    return github_display_name;
+  }
+
   private readonly apiEndpoints = inject(ApiEndpointsService);
 
   async logout(): Promise<void> {
