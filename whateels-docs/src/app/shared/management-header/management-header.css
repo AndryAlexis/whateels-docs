@@ -43,6 +43,43 @@
         }
     }
 
+    & .search-input-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        & > i {
+            position: absolute;
+            left: .5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ui-accent-light);
+            pointer-events: none;
+        }
+        & > input {
+            padding: .5rem 1.25rem .5rem 2rem;
+            border: 1px solid var(--ui-accent-light);
+            border-radius: 7px;
+            width: 100%;
+
+            &:hover {
+                border-color: var(--ui-accent-normal);
+
+                & + i {
+                    color: var(--ui-accent-normal);
+                }
+            }
+
+            &:focus {
+                outline: none;
+                border-color: var(--ui-brand-secondary);
+
+                & + i {
+                    color: var(--ui-brand-secondary);
+                }
+            }
+        }
+    }
+
     & .extra-options {
         display: flex;
         justify-content: flex-end;
