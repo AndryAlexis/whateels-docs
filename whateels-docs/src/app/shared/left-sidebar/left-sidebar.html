@@ -1,4 +1,4 @@
-<aside #sidebarScrollContainer (scroll)="onSidebarScroll($event)">
+<aside>
     <nav>
         <ul class="mobile-menu-header">
             <li>
@@ -13,37 +13,9 @@
             </li>
         </ul>
         <ul>
-            @if (loading) {
-                <li class="sidebar-loading">
-                    <app-section
-                        [title]="'Loading categories...'"
-                        [items]="[]"
-                    ></app-section>
-                </li>
-            }
-            @else if (error) {
-                <li class="sidebar-error">
-                    <span>{{ error }}</span>
-                </li>
-            }
-            @else if (categories?.length) {
-                @for (category of categories; track $index) {
-                    <li>
-                        <app-section
-                            [title]="category.title"
-                            [items]="pageItems(category)"
-                        ></app-section>
-                    </li>
-                }
-            }
-            @else {
-                <li>
-                    <app-section
-                        [title]="'No categories found.'"
-                        [items]="[]"
-                    ></app-section>
-                </li>
-            }
+            <li>
+                <app-section></app-section>
+            </li>
         </ul>
     </nav>
 </aside>

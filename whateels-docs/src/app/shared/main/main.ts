@@ -1,11 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
 import { PaginationComponent } from '../pagination/pagination';
 import { ObservableSectionDirective } from '../directives/observable-section.directive';
 import { SlugifyPipe } from '../pipes/slugify.pipe';
-import { DocPage } from '../../doc/doc-page.service';
 
 @Component({
   selector: 'app-main',
@@ -14,7 +13,4 @@ import { DocPage } from '../../doc/doc-page.service';
   styleUrl: './main.css',
 })
 export class Main {
-  readonly page = input<DocPage | null>(null);
-  readonly loading = input(false);
-  readonly error = input<string | null>(null);
 }

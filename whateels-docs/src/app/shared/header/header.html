@@ -21,26 +21,11 @@
                     </a>
                 </li>
                 <li>
-                    <ng-container *ngIf="!auth.isAuthenticated(); else loginTemplate">
-                        <div class="floating-menu-container">
-                            <button (click)="floatingMenu.toggle()">
-                                <i class="fa-regular fa-user"></i>
-                            </button>
-                            <div class="floating-menu" *ngIf="floatingMenu.isOpenValue">
-                                <a href="/auth/callback?action=login">
-                                    <span>
-                                        Login with Github 
-                                    </span>
-                                    <i class="fa-brands fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-template #loginTemplate>
-                        <a [href]="auth.getDashboardRoute()">
-                            <i class="fa-solid fa-user"></i>
+                    <div class="floating-menu-container">
+                        <a href="#">
+                            <i class="fa-regular fat-github"></i>
                         </a>
-                    </ng-template>
+                    </div>
                 </li>
             </ul>
         </li>

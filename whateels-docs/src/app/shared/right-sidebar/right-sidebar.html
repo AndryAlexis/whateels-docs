@@ -6,19 +6,11 @@
                     On this page
                 </h4>
             </li>
-            @if (sections().length === 0) {
-                <li>
-                    <p>No sections found.</p>
-                </li>
-            }
-            @else {
-                @for (section of sections(); track section.id) {
-                    @let slug = section.heading | slugify;
-                    <li>
-                        <a [routerLink]="[]" [fragment]="slug" [class.active]="isActive(slug)">{{ section.heading }}</a>
-                    </li>
-                }
-            }
+            <li>
+                <a [routerLink]="[]" [class.active]="false">
+                    Introduction
+                </a>
+            </li>
         </ul>
     </nav>
 </aside>

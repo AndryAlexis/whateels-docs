@@ -4,7 +4,6 @@
         <input
             #searchInput
             [ngModel]="searchQuery"
-            (input)="onSearchInput($event)"
             (keydown)="onKeydown($event)"
             type="text"
             placeholder="Find something..."
@@ -14,46 +13,23 @@
             aria-haspopup="listbox"
             aria-autocomplete="list"
             aria-controls="search-results-list"
-            [attr.aria-activedescendant]="selectedResultOptionId"
         />
     </div>
     <div class="search-results">
-        @if (hasQuery) {
-            @if (isLoading()) {
-                <div class="no-results">
-                    <p>Searching...</p>
-                    <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-                </div>
-            }
-            @if (hasResults()) {
-                <nav class="results" (mouseleave)="onResultsMouseLeave()">
-                    <ul id="search-results-list" role="listbox" aria-label="Search results">
-                        @for (item of results(); track trackResult(item); let i = $index) {
-                            <li
-                                class="result-item"
-                                role="option"
-                                [id]="resultOptionId(i)"
-                                [attr.aria-selected]="i === selectedIndex()"
-                                (mouseenter)="onResultHover(i)"
-                            >
-                                <a [routerLink]="['/', item.page.slug]" [fragment]="resultFragment(item)" (click)="searchModalService.close()">
-                                    <p>{{ resultTitle(item) }}</p>
-                                    @if (resultSubtitle(item)) {
-                                        <p>{{ resultSubtitle(item) }}</p>
-                                    }
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
-            } 
-            @if (!hasResults() && !isLoading()) {
-                <div class="no-results">
-                    <p>No results found...</p>
-                    <i class="fa-regular fa-face-frown" aria-hidden="true"></i>
-                </div>
-            }
-        }
+        <nav class="results" (mouseleave)="onResultsMouseLeave()">
+            <ul id="search-results-list" role="listbox" aria-label="Search results">
+                <li
+                    class="result-item"
+                    role="option"
+                >
+                    <a [routerLink]="['/']" (click)="searchModalService.close()">
+                        <p>
+                            lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptate?
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <div class="background" (click)="searchModalService.close()" aria-hidden="true"></div>
