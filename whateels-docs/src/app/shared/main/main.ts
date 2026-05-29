@@ -1,15 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, effect, ElementRef, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, ElementRef, inject, PLATFORM_ID } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, scan, startWith, switchMap } from 'rxjs';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
 import { PaginationComponent } from '../pagination/pagination';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ObservableSectionService } from '../services/observable-section.service';
+
+type MarkdownState = {
+  isLoading: boolean;
+  title: string;
+  content: string;
+};
+
+type MarkdownEvent =
+  | { type: 'loading' }
+  | { type: 'loaded'; title: string; content: string }
+  | { type: 'error' };
 
 @Component({
   selector: 'app-main',
@@ -23,55 +34,54 @@ export class Main {
   private readonly http = inject(HttpClient);
   private readonly route = inject(ActivatedRoute);
   private readonly observableSectionService = inject(ObservableSectionService);
-  readonly isMarkdownLoading = signal(true);
-
-  private readonly markdownSource$ = this.route.paramMap.pipe(
-    map((params) => {
-      const category = this.normalizePathSegment(params.get('category'));
-      const page = this.normalizePathSegment(params.get('page'));
-
-      return `assets/pages/${category ?? 'category_0'}/${page ?? 'introduction'}.md`;
-    })
-  );
-
-  readonly markdownSrc = toSignal(
-    this.markdownSource$,
-    { initialValue: 'assets/pages/category_0/introduction.md' }
-  );
-
-  readonly markdownContent = toSignal(
-    this.markdownSource$.pipe(
-      switchMap((src) =>
-        this.http.get(src, { responseType: 'text' }).pipe(
-          catchError(() => of(''))
-        )
-      )
-    ),
-    { initialValue: '' }
-  );
-
-  readonly pageTitle = toSignal(
+  private readonly markdownState = toSignal(
     this.route.paramMap.pipe(
-      map((params) => this.formatFileName(this.normalizePathSegment(params.get('page')) ?? 'introduction'))
+      map((params) => {
+        const category = this.normalizePathSegment(params.get('category')) ?? 'category_0';
+        const page = this.normalizePathSegment(params.get('page')) ?? 'introduction';
+
+        return {
+          page,
+          src: `assets/pages/${category}/${page}.md`,
+        };
+      }),
+      switchMap(({ page, src }) => {
+        const title = this.formatFileName(page);
+
+        return this.http.get(src, { responseType: 'text' }).pipe(
+          map((content): MarkdownEvent => ({ type: 'loaded', title, content })),
+          startWith({ type: 'loading' } as MarkdownEvent),
+          catchError(() => of({ type: 'error' } as MarkdownEvent))
+        );
+      }),
+      scan<MarkdownEvent, MarkdownState>((state, event) => {
+        if (event.type === 'loading') {
+          return { ...state, isLoading: true };
+        }
+
+        if (event.type === 'error') {
+          return { ...state, isLoading: false };
+        }
+
+        return {
+          isLoading: false,
+          title: event.title,
+          content: event.content,
+        };
+      }, { isLoading: true, title: '', content: '' })
     ),
-    { initialValue: 'Introduction' }
+    { initialValue: { isLoading: true, title: '', content: '' } }
   );
 
-  constructor() {
-    effect(() => {
-      this.markdownContent();
-      this.isMarkdownLoading.set(true);
-    });
-  }
+  readonly isMarkdownLoading = computed(() => this.markdownState().isLoading);
+  readonly markdownContent = computed(() => this.markdownState().content);
+  readonly pageTitle = computed(() => this.markdownState().title);
 
   onMarkdownReady(): void {
     this.assignSectionIds();
-    this.isMarkdownLoading.set(false);
   }
 
-  onMarkdownError(): void {
-    this.isMarkdownLoading.set(false);
-  }
+  onMarkdownError(): void {}
 
   private assignSectionIds(): void {
     if (!isPlatformBrowser(this.platformId)) {

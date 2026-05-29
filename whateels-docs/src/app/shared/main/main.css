@@ -41,12 +41,11 @@
                 min-height: 10rem;
 
                 position: absolute;
-                inset: 0;
-                z-index: 10;
+                top: 0;
+                left: 0;
 
                 width: 100%;
                 height: calc(100dvh - (var(--margin-header-content) * 2) - var(--header-height));
-                pointer-events: none;
             }
 
             & .spinner {
