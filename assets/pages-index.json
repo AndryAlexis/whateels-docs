@@ -1,0 +1,17 @@
+{
+  "categories": [
+    {
+      "name": "category_0",
+      "pages": [
+        "andry",
+        "introduction"
+      ]
+    },
+    {
+      "name": "category_1",
+      "pages": [
+        "test"
+      ]
+    }
+  ]
+}
