@@ -12,6 +12,13 @@
       "pages": [
         "test"
       ]
+    },
+    {
+      "name": "category_2",
+      "pages": [
+        "test_1",
+        "test_1-copy"
+      ]
     }
   ]
 }
