@@ -9,6 +9,7 @@ export class ObservableSectionService {
   activeSectionId = signal<string | null>(null);
   private observer: IntersectionObserver | null = null;
   private isInitialized = false;
+  private observedElements = new Set<HTMLElement>();
 
   private initializeObserver(): void {
     if (!isPlatformBrowser(this.platformId) || this.isInitialized) {
@@ -57,5 +58,24 @@ export class ObservableSectionService {
 
   unregisterElement(element: HTMLElement): void {
     this.observer?.unobserve(element);
+    this.observedElements.delete(element);
+  }
+
+  observeElements(elements: HTMLElement[]): void {
+    this.initializeObserver();
+
+    this.observedElements.forEach((element) => {
+      this.observer?.unobserve(element);
+    });
+    this.observedElements.clear();
+
+    elements.forEach((element) => {
+      if (!element.id) {
+        return;
+      }
+
+      this.observer?.observe(element);
+      this.observedElements.add(element);
+    });
   }
 }
