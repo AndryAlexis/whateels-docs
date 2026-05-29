@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
@@ -16,6 +16,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 })
 export class Main {
   private readonly route = inject(ActivatedRoute);
+  readonly isMarkdownLoading = signal(true);
 
   readonly markdownSrc = toSignal(
     this.route.paramMap.pipe(
@@ -28,6 +29,21 @@ export class Main {
     ),
     { initialValue: 'assets/pages/category_0/introduction.md' }
   );
+
+  constructor() {
+    effect(() => {
+      this.markdownSrc();
+      this.isMarkdownLoading.set(true);
+    });
+  }
+
+  onMarkdownReady(): void {
+    this.isMarkdownLoading.set(false);
+  }
+
+  onMarkdownError(): void {
+    this.isMarkdownLoading.set(false);
+  }
 
   private normalizePathSegment(value: string | null): string | null {
     if (!value) {

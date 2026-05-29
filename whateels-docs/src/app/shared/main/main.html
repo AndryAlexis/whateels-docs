@@ -1,6 +1,18 @@
 <div>
     <main>
-        <markdown class="markdown-content" [src]="markdownSrc()"></markdown>
+        <div class="markdown-shell">
+            @if (isMarkdownLoading()) {
+                <div class="markdown-loader" aria-live="polite" aria-label="Loading page">
+                    <span class="spinner"></span>
+                </div>
+            }
+            <markdown
+                class="markdown-content"
+                [src]="markdownSrc()"
+                (ready)="onMarkdownReady()"
+                (error)="onMarkdownError()"
+            ></markdown>
+        </div>
     </main>
     <app-pagination
         [next]="null"
