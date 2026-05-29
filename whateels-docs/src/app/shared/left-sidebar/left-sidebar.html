@@ -13,9 +13,11 @@
             </li>
         </ul>
         <ul>
-            <li>
-                <app-section></app-section>
-            </li>
+            @for (section of sections(); track section.title) {
+                <li>
+                    <app-section [title]="section.title" [items]="section.items"></app-section>
+                </li>
+            }
         </ul>
     </nav>
 </aside>

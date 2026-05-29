@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
@@ -12,4 +15,25 @@ import { MarkdownComponent } from 'ngx-markdown';
   styleUrl: './main.css',
 })
 export class Main {
+  private readonly route = inject(ActivatedRoute);
+
+  readonly markdownSrc = toSignal(
+    this.route.paramMap.pipe(
+      map((params) => {
+        const category = this.normalizePathSegment(params.get('category'));
+        const page = this.normalizePathSegment(params.get('page'));
+
+        return `assets/pages/${category ?? 'category_0'}/${page ?? 'introduction'}.md`;
+      })
+    ),
+    { initialValue: 'assets/pages/category_0/introduction.md' }
+  );
+
+  private normalizePathSegment(value: string | null): string | null {
+    if (!value) {
+      return null;
+    }
+
+    return /^[A-Za-z0-9_-]+$/.test(value) ? value : null;
+  }
 }

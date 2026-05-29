@@ -2,6 +2,6 @@ import { Doc } from './doc/doc';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', component: Doc },
-  { path: ':slug', component: Doc }
+  { path: '', pathMatch: 'full', redirectTo: 'category_0/introduction' },
+  { path: ':category/:page', component: Doc }
 ];
