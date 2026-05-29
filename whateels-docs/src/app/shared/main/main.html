@@ -6,9 +6,12 @@
                     <span class="spinner"></span>
                 </div>
             }
+            <h1 class="page-title">
+                {{ pageTitle() }}
+            </h1>
             <markdown
                 class="markdown-content"
-                [src]="markdownSrc()"
+                [data]="markdownContent()"
                 (ready)="onMarkdownReady()"
                 (error)="onMarkdownError()"
             ></markdown>

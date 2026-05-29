@@ -1,8 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, effect, ElementRef, inject, PLATFORM_ID, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
@@ -19,25 +20,46 @@ import { ObservableSectionService } from '../services/observable-section.service
 export class Main {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly hostElement = inject(ElementRef<HTMLElement>);
+  private readonly http = inject(HttpClient);
   private readonly route = inject(ActivatedRoute);
   private readonly observableSectionService = inject(ObservableSectionService);
   readonly isMarkdownLoading = signal(true);
 
-  readonly markdownSrc = toSignal(
-    this.route.paramMap.pipe(
-      map((params) => {
-        const category = this.normalizePathSegment(params.get('category'));
-        const page = this.normalizePathSegment(params.get('page'));
+  private readonly markdownSource$ = this.route.paramMap.pipe(
+    map((params) => {
+      const category = this.normalizePathSegment(params.get('category'));
+      const page = this.normalizePathSegment(params.get('page'));
 
-        return `assets/pages/${category ?? 'category_0'}/${page ?? 'introduction'}.md`;
-      })
-    ),
+      return `assets/pages/${category ?? 'category_0'}/${page ?? 'introduction'}.md`;
+    })
+  );
+
+  readonly markdownSrc = toSignal(
+    this.markdownSource$,
     { initialValue: 'assets/pages/category_0/introduction.md' }
+  );
+
+  readonly markdownContent = toSignal(
+    this.markdownSource$.pipe(
+      switchMap((src) =>
+        this.http.get(src, { responseType: 'text' }).pipe(
+          catchError(() => of(''))
+        )
+      )
+    ),
+    { initialValue: '' }
+  );
+
+  readonly pageTitle = toSignal(
+    this.route.paramMap.pipe(
+      map((params) => this.formatFileName(this.normalizePathSegment(params.get('page')) ?? 'introduction'))
+    ),
+    { initialValue: 'Introduction' }
   );
 
   constructor() {
     effect(() => {
-      this.markdownSrc();
+      this.markdownContent();
       this.isMarkdownLoading.set(true);
     });
   }
@@ -87,5 +109,12 @@ export class Main {
     }
 
     return /^[A-Za-z0-9_-]+$/.test(value) ? value : null;
+  }
+
+  private formatFileName(value: string): string {
+    return value
+      .replace(/[_.-]+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 }
