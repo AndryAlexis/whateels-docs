@@ -91,6 +91,13 @@
                 display: grid;
                 place-items: center;
                 min-height: 10rem;
+
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                width: 100%;
+                height: calc(100dvh - (var(--margin-header-content) * 2) - var(--header-height));
             }
 
             & .spinner {
@@ -100,6 +107,17 @@
                 border: 3px solid #d9dce3;
                 border-top-color: var(--ui-brand-secondary);
                 animation: spin 0.8s linear infinite;
+
+                background:
+                    radial-gradient(
+                        circle at center,
+                        rgba(255, 255, 255, 1) 20%,
+                        rgba(255, 255, 255, 0.8) 70%,
+                        rgba(255, 255, 255, 0.4) 88%,
+                        transparent 100%
+                    );
+                
+                position: fixed;
             }
         }
 
