@@ -1,11 +1,10 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ObservableSectionService } from '../services/observable-section.service';
-import { SlugifyPipe } from '../pipes/slugify.pipe';
 
 @Component({
   selector: 'app-right-sidebar',
-  imports: [SlugifyPipe, RouterLink],
+  imports: [RouterLink],
   templateUrl: './right-sidebar.html',
   styleUrl: './right-sidebar.css',
 })
