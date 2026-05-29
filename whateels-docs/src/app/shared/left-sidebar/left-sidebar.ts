@@ -2,7 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, HostBinding, inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { catchError, combineLatest, map, of } from 'rxjs';
 import { Section } from './section/section';
 import { Logo } from '../logo/logo';
 import { LeftSidebarService } from '../services/leftsidebar.service';
@@ -19,25 +20,29 @@ type PagesIndexResponse = { categories: { name: string; pages: string[] }[] };
 export class LeftSidebar {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
   private readonly scrollStorageKey = 'left-sidebar-scroll-top';
   @ViewChild('sidebarScrollContainer') private readonly sidebarScrollContainer?: ElementRef<HTMLElement>;
 
   readonly sections = toSignal(
-    this.http
-      .get<PagesIndexResponse>('/api/pages-index')
-      .pipe(
+    combineLatest([
+      this.http.get<PagesIndexResponse>('/api/pages-index').pipe(
         catchError(() => this.http.get<PagesIndexResponse>('assets/pages-index.json')),
-        map((response) =>
-          response.categories.map((category) => ({
-            title: category.name,
-            items: category.pages.map((page) => ({
-              name: page,
-              href: `/${category.name}/${page}`,
-            })),
-          }))
-        ),
-        catchError(() => of([]))
+        catchError(() => of({ categories: [] }))
       ),
+      this.route.paramMap.pipe(map((params) => params.get('page'))),
+    ]).pipe(
+      map(([response, currentPage]) =>
+        response.categories.map((category) => ({
+          title: category.name,
+          items: category.pages.map((page) => ({
+            name: page,
+            href: `/${category.name}/${page}`,
+            isActive: page === currentPage,
+          })),
+        }))
+      )
+    ),
     { initialValue: [] }
   );
 
