@@ -1,0 +1,52 @@
+:host {
+    position: fixed;
+    bottom: var(--content-padding);
+    right: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    & .chat {
+        margin-bottom: 1rem;
+        width: 250px;
+        height: 400px;
+
+        min-width: 250px;
+        min-height: 400px;
+
+        border-radius: 7px;
+
+        overflow: clip;
+        display: flex;
+        box-shadow: 0 2px 10px #f0f0f1;
+
+        position: relative;
+
+        & .carrousel {
+            display: flex;
+        }
+    }
+
+    & > button {
+        background-color: white;
+        color: var(--ui-accent-light);
+        border: none;
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 10px #f0f0f1;
+        font-size: 1.5rem;
+
+        &:hover {
+            color: var(--ui-brand-secondary);
+        }
+    }
+
+    & .activate {
+        color: var(--ui-brand-secondary);
+    }
+}
