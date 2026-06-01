@@ -1,6 +1,12 @@
 <article class="email">
     <header class="chat-header">
+        <button (click)="openWhateelbot()">
+            <i class="fa-solid fa-angle-left"></i>
+        </button>
         <h6>Email to admin</h6>
+        <button (click)="closeChat()">
+            <i class="fa-solid fa-window-minimize"></i>
+        </button>
     </header>
     <form id="email-form" class="chat-body" [formGroup]="emailForm" (ngSubmit)="sendEmail($event)">
         <div>

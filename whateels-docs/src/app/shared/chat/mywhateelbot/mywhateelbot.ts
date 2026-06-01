@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { WhateelbotService } from '../../services/whateelbot.service';
 import { EmailAdminService } from '../../services/email-admin.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-mywhateelbot',
@@ -9,6 +10,7 @@ import { EmailAdminService } from '../../services/email-admin.service';
   styleUrl: './mywhateelbot.css',
 })
 export class Mywhateelbot {
+  private readonly chatService = inject(ChatService);
   private readonly whateelbotService = inject(WhateelbotService);
   private readonly emailAdminService = inject(EmailAdminService);
 
@@ -17,4 +19,7 @@ export class Mywhateelbot {
     this.emailAdminService.open();
   }
   
+  closeChat(): void {
+    this.chatService.close();
+  }
 }
