@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Mywhateelbot } from './mywhateelbot/mywhateelbot';
 import { EmailAdmin } from './email-admin/email-admin';
+import { EmailStatus } from './email-status/email-status';
 import { ChatService } from '../services/chat.service';
 import { WhateelbotService } from '../services/whateelbot.service';
 import { EmailAdminService } from '../services/email-admin.service';
@@ -8,7 +9,7 @@ import { EmailAdminService } from '../services/email-admin.service';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [Mywhateelbot, EmailAdmin],
+  imports: [Mywhateelbot, EmailAdmin, EmailStatus],
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })
