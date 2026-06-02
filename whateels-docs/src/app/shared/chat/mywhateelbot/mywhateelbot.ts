@@ -3,6 +3,10 @@ import { WhateelbotService } from '../../services/whateelbot.service';
 import { EmailAdminService } from '../../services/email-admin.service';
 import { ChatService } from '../../services/chat.service';
 
+type ChatApiResponse = {
+  message?: string;
+};
+
 @Component({
   selector: 'app-mywhateelbot',
   imports: [],
@@ -16,7 +20,6 @@ export class Mywhateelbot {
   @ViewChild('chatBody') private chatBody?: ElementRef<HTMLElement>;
   readonly messages = this.whateelbotService.messages;
   readonly draftMessage = signal('');
-  private readonly pendingReplyTimers = new Set<number>();
   private pendingScrollFrame: number | null = null;
 
   onDraftMessageChange(event: Event): void {
@@ -24,7 +27,7 @@ export class Mywhateelbot {
     this.draftMessage.set(input.value);
   }
 
-  sendMessage(event: SubmitEvent): void {
+  async sendMessage(event: SubmitEvent): Promise<void> {
     event.preventDefault();
 
     const message = this.draftMessage().trim();
@@ -38,25 +41,38 @@ export class Mywhateelbot {
     this.draftMessage.set('');
     this.queueScrollToBottom();
 
-    const timerId = window.setTimeout(() => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Chat endpoint failed with status ${response.status}`);
+      }
+
+      const data = (await response.json()) as ChatApiResponse;
+      const botReply = typeof data.message === 'string' && data.message.trim()
+        ? data.message.trim()
+        : 'I could not generate a response right now.';
+
       this.whateelbotService.updateMessage(thinkingMessage.id, {
-        text: 'Response wejdew iofwej woeijf eñfoiej feñwoifjweñfoijwefñoiwejñeowijfwñoifjeji',
+        text: botReply,
         status: 'sent',
       });
-      this.pendingReplyTimers.delete(timerId);
-    }, 1000);
-
-    this.pendingReplyTimers.add(timerId);
-
+    } catch (error) {
+      console.error('Chat request failed:', error);
+      this.whateelbotService.failMessage(
+        thinkingMessage.id,
+        'Sorry, I cannot answer right now. Please try again in a moment.'
+      );
+    }
   }
 
   ngOnDestroy(): void {
-    for (const timerId of this.pendingReplyTimers) {
-      window.clearTimeout(timerId);
-    }
-
-    this.pendingReplyTimers.clear();
-
     if (this.pendingScrollFrame !== null) {
       window.cancelAnimationFrame(this.pendingScrollFrame);
       this.pendingScrollFrame = null;

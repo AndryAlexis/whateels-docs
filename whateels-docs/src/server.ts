@@ -4,14 +4,21 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import 'dotenv/config';
 import express from 'express';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import OpenAI from 'openai';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+const openAiClient = process.env['OPENAI_API_KEY']
+  ? new OpenAI({ apiKey: process.env['OPENAI_API_KEY'] })
+  : null;
+
+app.use(express.json());
 
 app.get('/api/pages-index', async (_req, res) => {
   try {
@@ -61,6 +68,43 @@ app.get('/api/pages-index', async (_req, res) => {
     res.json({ categories });
   } catch {
     res.status(500).json({ categories: [] });
+  }
+});
+
+app.post('/api/chat', async (req, res) => {
+  const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
+
+  if (!message) {
+    res.status(400).json({ message: 'Message is required.' });
+    return;
+  }
+
+  if (!openAiClient) {
+    res.status(500).json({ message: 'OPENAI_API_KEY is not configured on the server.' });
+    return;
+  }
+
+  try {
+    const response = await openAiClient.responses.create({
+      model: process.env['OPENAI_MODEL'] ?? 'gpt-4.1-mini',
+      input: [
+        {
+          role: 'system',
+          content:
+            'You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website.',
+        },
+        {
+          role: 'user',
+          content: message,
+        },
+      ],
+    });
+
+    const reply = response.output_text?.trim() || 'I could not generate a response right now.';
+    res.json({ message: reply });
+  } catch (error) {
+    console.error('OpenAI request failed:', error);
+    res.status(500).json({ message: 'Failed to generate a response.' });
   }
 });
 

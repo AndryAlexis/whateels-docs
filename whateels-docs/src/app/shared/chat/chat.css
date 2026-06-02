@@ -8,11 +8,11 @@
 
     & .chat {
         margin-bottom: 1rem;
-        width: 250px;
-        height: 400px;
+        height: 500px;
+        width: 312.5px;
 
-        min-width: 250px;
-        min-height: 400px;
+        min-height: 500px;
+        min-width: 312.5px;
 
         border-radius: 7px;
 
