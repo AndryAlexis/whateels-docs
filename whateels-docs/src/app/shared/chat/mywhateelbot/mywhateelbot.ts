@@ -40,7 +40,7 @@ export class Mywhateelbot {
 
     const timerId = window.setTimeout(() => {
       this.whateelbotService.updateMessage(thinkingMessage.id, {
-        text: 'Response',
+        text: 'Response wejdew iofwej woeijf eñfoiej feñwoifjweñfoijwefñoiwejñeowijfwñoifjeji',
         status: 'sent',
       });
       this.pendingReplyTimers.delete(timerId);

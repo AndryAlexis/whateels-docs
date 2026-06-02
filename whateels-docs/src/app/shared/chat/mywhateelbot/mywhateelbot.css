@@ -89,6 +89,12 @@
             font-weight: 300;
             color: var(--ui-accent-normal);
             border: 1px solid var(--ui-accent-dark);
+
+            & p {
+                width: 100%;
+                height: auto;
+                line-break: anywhere;
+            }
         }
 
         & .message-bubble,
