@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { WhateelbotService } from '../../services/whateelbot.service';
 import { EmailAdminService } from '../../services/email-admin.service';
 import { ChatService } from '../../services/chat.service';
+import { EmailStatusService } from '../../services/email-status.service';
 import emailjs from '@emailjs/browser';
 
 type EmailJsError = {
@@ -22,6 +23,7 @@ export class EmailAdmin {
   private readonly chatService = inject(ChatService);
   private readonly whateelbotService = inject(WhateelbotService);
   private readonly emailAdminService = inject(EmailAdminService);
+  private readonly emailStatusService = inject(EmailStatusService);
   private isSending = false;
 
   private readonly serviceId = 'service_1g2l90b';
@@ -57,6 +59,8 @@ export class EmailAdmin {
 
     const { name, email, message } = this.emailForm.getRawValue();
     this.isSending = true;
+    this.emailAdminService.close();
+    this.emailStatusService.showLoading();
 
     try {
       const response = await emailjs.send(
@@ -73,18 +77,20 @@ export class EmailAdmin {
       );
 
       if (response.status === 200) {
-        alert('Email sent successfully!');
+        this.emailStatusService.showSuccess();
         this.emailForm.reset();
       } else {
-        alert(`EmailJS failed with status ${response.status}.`);
+        this.emailStatusService.showError();
+        console.error(`EmailJS failed with status ${response.status}.`);
       }
     } catch (error: unknown) {
       const emailJsError = error as EmailJsError;
       const reason = emailJsError.text ?? emailJsError.message ?? 'Unknown error';
       const statusInfo = emailJsError.status ? ` (status ${emailJsError.status})` : '';
 
+      this.emailStatusService.showError();
       console.error('EmailJS send failed:', error);
-      alert(`Email failed${statusInfo}: ${reason}`);
+      console.error(`Email failed${statusInfo}: ${reason}`);
     } finally {
       this.isSending = false;
     }

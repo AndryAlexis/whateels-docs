@@ -5,6 +5,7 @@ import { EmailStatus } from './email-status/email-status';
 import { ChatService } from '../services/chat.service';
 import { WhateelbotService } from '../services/whateelbot.service';
 import { EmailAdminService } from '../services/email-admin.service';
+import { EmailStatusService } from '../services/email-status.service';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +18,7 @@ export class Chat {
   private readonly chatService = inject(ChatService);
   private readonly whateelbotService = inject(WhateelbotService);
   private readonly emailAdminService = inject(EmailAdminService);
+  private readonly emailStatusService = inject(EmailStatusService);
 
   isChatOpen(): boolean {
     return this.chatService.isOpen();
@@ -36,6 +38,10 @@ export class Chat {
 
   isEmailAdminOpen(): boolean {
     return this.emailAdminService.isOpen();
+  }
+
+  isEmailStatusOpen(): boolean {
+    return this.emailStatusService.isOpen();
   }
 
   toggleEmailAdmin(): void {
