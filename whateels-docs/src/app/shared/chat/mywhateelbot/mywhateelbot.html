@@ -6,23 +6,38 @@
         </button>
     </header>
     <main class="chat-body">
-        <div class="eelbot-bubble">
-            <p>Hello! I'm WhatEELBot, your friendly documentation assistant. How can I help you today?</p>
+        <div>
+            @for (message of messages(); track message.id) {
+                <div
+                    class="message-bubble"
+                    [class.whateelbot-bubble]="message.role === 'bot'"
+                    [class.user-bubble]="message.role === 'user'"
+                    [class.thinking]="message.status === 'thinking'"
+                    [class.error]="message.status === 'error'"
+                >
+                    @if (message.role === 'bot' && message.status === 'thinking') {
+                        <span class="loading-spinner"></span>
+                    }
+                    <p>{{ message.text }}</p>
+                </div>
+            }
         </div>
-        <!-- <div class="user-bubble">
-            <p>Can you tell me more about the API?</p>
-        </div> -->
     </main>
     <footer class="chat-footer">
         <div class="suggestions">
             <button>What can I ask you?</button>
             <button (click)="openEmailAdmin()">I'd rather to email the admin</button>
         </div>
-        <div class="input-group">
-            <input type="text" placeholder="Type a message...">
-            <button>
+        <form class="input-group" (submit)="sendMessage($event)">
+            <input
+                type="text"
+                placeholder="Type a message..."
+                [value]="draftMessage()"
+                (input)="onDraftMessageChange($event)"
+            >
+            <button type="submit">
                 <i class="fa-regular fa-paper-plane"></i>        
             </button>
-        </div>
+        </form>
     </footer>
 </article>
