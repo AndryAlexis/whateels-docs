@@ -93,7 +93,7 @@
             & p {
                 width: 100%;
                 height: auto;
-                line-break: anywhere;
+                word-break: break-word;
             }
         }
 
@@ -175,12 +175,21 @@
         & .input-group {
             flex: 1;
             display: flex;
-            & > input {
+            align-items: flex-end;
+            gap: 0.25rem;
+
+            & > textarea {
                 flex: 1;
                 padding: 0.5rem;
                 border: 1px solid #ccc;
                 border-radius: 7px;
-
+                font: inherit;
+                line-height: 1.2rem;
+                resize: none;
+                overflow-y: hidden;
+                min-height: calc(1.2rem + 1rem + 2px);
+                max-height: calc(1.2rem * 3 + 1rem + 2px);
+                color: var(--ui-accent-dark);
                 &:focus {
                     outline: 1px solid var(--ui-brand-secondary);
                 }

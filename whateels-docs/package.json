@@ -24,6 +24,7 @@
     "@angular/ssr": "^21.2.10",
     "@emailjs/browser": "^4.4.1",
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
     "jwt-decode": "^4.0.0",
     "ngx-markdown": "^21.3.0",

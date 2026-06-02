@@ -29,12 +29,14 @@
             <button (click)="openEmailAdmin()">I'd rather to email the admin</button>
         </div>
         <form class="input-group" (submit)="sendMessage($event)">
-            <input
-                type="text"
+            <textarea
+                #messageInput
                 placeholder="Type a message..."
                 [value]="draftMessage()"
                 (input)="onDraftMessageChange($event)"
-            >
+                (keydown)="onInputKeydown($event)"
+                rows="1"
+            ></textarea>
             <button type="submit">
                 <i class="fa-regular fa-paper-plane"></i>        
             </button>
