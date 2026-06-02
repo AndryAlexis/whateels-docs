@@ -56,30 +56,29 @@
     & .chat-body {
         flex: 1;
         min-height: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        font-weight: normal;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0.5rem;
+        scrollbar-gutter: stable;
 
-        & > div {
-            max-height: 100%;
-            height: 100%;
-            overflow: auto;
-            padding: 0.5rem;
-            scrollbar-gutter: stable;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
 
-            &::-webkit-scrollbar {
-                width: 8px;
-            }
+        &::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
 
-            &::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
-                border-radius: 999px;
-            }
+        &::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
-            &::-webkit-scrollbar-thumb:hover {
-                background: #94a3b8;
-            }
+        & .chat-messages {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
         & .message-bubble,

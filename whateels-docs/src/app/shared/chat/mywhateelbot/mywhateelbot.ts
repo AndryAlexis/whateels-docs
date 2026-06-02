@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { WhateelbotService } from '../../services/whateelbot.service';
 import { EmailAdminService } from '../../services/email-admin.service';
 import { ChatService } from '../../services/chat.service';
@@ -13,9 +13,11 @@ export class Mywhateelbot {
   private readonly chatService = inject(ChatService);
   private readonly whateelbotService = inject(WhateelbotService);
   private readonly emailAdminService = inject(EmailAdminService);
+  @ViewChild('chatBody') private chatBody?: ElementRef<HTMLElement>;
   readonly messages = this.whateelbotService.messages;
   readonly draftMessage = signal('');
   private readonly pendingReplyTimers = new Set<number>();
+  private pendingScrollFrame: number | null = null;
 
   onDraftMessageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -34,6 +36,7 @@ export class Mywhateelbot {
     this.whateelbotService.addUserMessage(message);
     const thinkingMessage = this.whateelbotService.addBotThinkingMessage();
     this.draftMessage.set('');
+    this.queueScrollToBottom();
 
     const timerId = window.setTimeout(() => {
       this.whateelbotService.updateMessage(thinkingMessage.id, {
@@ -53,6 +56,11 @@ export class Mywhateelbot {
     }
 
     this.pendingReplyTimers.clear();
+
+    if (this.pendingScrollFrame !== null) {
+      window.cancelAnimationFrame(this.pendingScrollFrame);
+      this.pendingScrollFrame = null;
+    }
   }
 
   openEmailAdmin(): void {
@@ -62,5 +70,21 @@ export class Mywhateelbot {
   
   closeChat(): void {
     this.chatService.close();
+  }
+
+  private queueScrollToBottom(): void {
+    if (this.pendingScrollFrame !== null) {
+      window.cancelAnimationFrame(this.pendingScrollFrame);
+    }
+
+    this.pendingScrollFrame = window.requestAnimationFrame(() => {
+      const chatBodyElement = this.chatBody?.nativeElement;
+
+      if (chatBodyElement) {
+        chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
+      }
+
+      this.pendingScrollFrame = null;
+    });
   }
 }

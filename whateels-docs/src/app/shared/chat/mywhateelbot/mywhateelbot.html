@@ -5,8 +5,8 @@
             <i class="fa-solid fa-window-minimize"></i>
         </button>
     </header>
-    <main class="chat-body">
-        <div>
+    <main class="chat-body" #chatBody>
+        <div class="chat-messages">
             @for (message of messages(); track message.id) {
                 <div
                     class="message-bubble"
