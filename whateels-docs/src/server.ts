@@ -129,7 +129,8 @@ app.post('/api/chat', async (req, res) => {
     const extractedReply = supportIntentFromModel
       ? rawReply.slice(supportToken.length).trim() || 'I can help you contact the admin team.'
       : rawReply;
-    const needsHumanSupport = supportIntentFromPrompt || supportIntentFromModel;
+    const supportIntentFromReply = /real person|human|admin|support team|contact the admin|contact support|button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
+    const needsHumanSupport = supportIntentFromPrompt || supportIntentFromModel || supportIntentFromReply;
     const shouldMentionButton = needsHumanSupport && !/button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
     const reply = shouldMentionButton
       ? `${extractedReply} I enabled a button right below this message so you can contact the admin team quickly.`

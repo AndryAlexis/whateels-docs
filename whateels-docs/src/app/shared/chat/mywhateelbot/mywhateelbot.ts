@@ -73,8 +73,7 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       return;
     }
 
-    const shouldOfferEmailAdminFromPrompt = this.shouldOfferEmailAdmin(message);
-    this.showEmailAdminSuggestion.set(shouldOfferEmailAdminFromPrompt);
+    this.showEmailAdminSuggestion.set(false);
 
     this.whateelbotService.addUserMessage(message);
     const thinkingMessage = this.whateelbotService.addBotThinkingMessage();
@@ -105,10 +104,7 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       const botReply = typeof data.message === 'string' && data.message.trim()
         ? data.message.trim()
         : 'I could not generate a response right now.';
-      const shouldOfferEmailAdmin =
-        shouldOfferEmailAdminFromPrompt || data.needsHumanSupport === true;
-
-      this.showEmailAdminSuggestion.set(shouldOfferEmailAdmin);
+      this.showEmailAdminSuggestion.set(data.needsHumanSupport === true);
 
       this.whateelbotService.updateMessage(thinkingMessage.id, {
         text: botReply,
@@ -256,30 +252,5 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
 
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
-  }
-
-  private shouldOfferEmailAdmin(userPrompt: string): boolean {
-    const normalizedPrompt = userPrompt.toLowerCase();
-
-    const emailIntentTerms = [
-      'real person',
-      'someone real',
-      'talk to someone',
-      'talk with someone',
-      'human',
-      'email',
-      'e-mail',
-      'contact admin',
-      'admin',
-      'support',
-      'support agent',
-      'representative',
-      'help desk',
-      'human support',
-      'customer service',
-      'customer support',
-    ];
-
-    return emailIntentTerms.some((term) => normalizedPrompt.includes(term));
   }
 }
