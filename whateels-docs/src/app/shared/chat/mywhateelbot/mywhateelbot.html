@@ -27,7 +27,7 @@
         <div class="suggestions">
             <button>What can I ask you?</button>
             @if (showEmailAdminSuggestion()) {
-                <button (click)="openEmailAdmin()">{{ emailAdminActionLabel }}</button>
+                <button (click)="openEmailAdmin()">Contact WhatEELS team</button>
             }
         </div>
         <form class="input-group" (submit)="sendMessage($event)">

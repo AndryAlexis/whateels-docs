@@ -24,7 +24,6 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
   @ViewChild('messageInput') private messageInput?: ElementRef<HTMLTextAreaElement>;
   readonly messages = this.whateelbotService.messages;
   readonly messageMaxLength = 250;
-  readonly emailAdminActionLabel = "I'd rather to email the admin";
   readonly showEmailAdminSuggestion = signal(false);
   readonly draftMessage = signal('');
   private readonly chatRequestTimeoutMs = 15000;
