@@ -36,7 +36,6 @@ export class Main {
   private readonly observableSectionService = inject(ObservableSectionService);
   private readonly markdownState = toSignal(
     this.route.paramMap.pipe(
-      startWith(this.route.snapshot.paramMap),
       map((params) => {
         const category = this.normalizePathSegment(params.get('category')) ?? 'category_0';
         const page = this.normalizePathSegment(params.get('page')) ?? 'introduction';

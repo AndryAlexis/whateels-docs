@@ -198,6 +198,11 @@
                 position: absolute;
                 bottom: -0.5rem;
                 right: 0.5rem;
+
+                &.message-max-length-exceeded {
+                    border: 1px solid #ef4444;
+                    color: #b91c1c;
+                }
             }
 
             & textarea {
@@ -215,6 +220,11 @@
                 color: var(--ui-accent-dark);
                 background-color: #f8fafc;
                 font-size: 0.8rem;
+
+                &.message-max-length-exceeded {
+                    border: 1px solid #ef4444;
+                    color: #b91c1c;
+                }
 
                 &::placeholder {
                     color: var(--ui-accent-light);
@@ -236,16 +246,16 @@
                 cursor: pointer;
                 background-color: transparent;
 
+                &:disabled {
+                    cursor: not-allowed;
+                    opacity: 0.5;
+                }
+
                 &:hover i {
                     color: var(--ui-brand-secondary);
                 }
             }
         }
-    }
-
-    & .message-max-length-exceeded {
-        border: 1px solid #ef4444;
-        color: #b91c1c;
     }
 }
 

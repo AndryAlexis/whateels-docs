@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideMarkdown } from 'ngx-markdown';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideMarkdown(),
-    provideClientHydration(withEventReplay())
+    provideClientHydration()
   ]
 };
