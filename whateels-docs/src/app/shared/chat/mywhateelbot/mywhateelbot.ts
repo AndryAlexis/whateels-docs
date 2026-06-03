@@ -22,7 +22,7 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
   @ViewChild('chatBody') private chatBody?: ElementRef<HTMLElement>;
   @ViewChild('messageInput') private messageInput?: ElementRef<HTMLTextAreaElement>;
   readonly messages = this.whateelbotService.messages;
-  readonly messageMaxLength = 10;
+  readonly messageMaxLength = 250;
   readonly draftMessage = signal('');
   private readonly chatRequestTimeoutMs = 15000;
   private pendingScrollFrame: number | null = null;
