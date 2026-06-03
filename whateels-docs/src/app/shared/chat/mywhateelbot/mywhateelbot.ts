@@ -6,6 +6,7 @@ import { ChatService } from '../../services/chat.service';
 
 type ChatApiResponse = {
   message?: string;
+  needsHumanSupport?: boolean;
 };
 
 @Component({
@@ -23,6 +24,8 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
   @ViewChild('messageInput') private messageInput?: ElementRef<HTMLTextAreaElement>;
   readonly messages = this.whateelbotService.messages;
   readonly messageMaxLength = 250;
+  readonly emailAdminActionLabel = "I'd rather to email the admin";
+  readonly showEmailAdminSuggestion = signal(false);
   readonly draftMessage = signal('');
   private readonly chatRequestTimeoutMs = 15000;
   private pendingScrollFrame: number | null = null;
@@ -71,6 +74,9 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       return;
     }
 
+    const shouldOfferEmailAdminFromPrompt = this.shouldOfferEmailAdmin(message);
+    this.showEmailAdminSuggestion.set(shouldOfferEmailAdminFromPrompt);
+
     this.whateelbotService.addUserMessage(message);
     const thinkingMessage = this.whateelbotService.addBotThinkingMessage();
     this.resetDraftMessage();
@@ -100,6 +106,10 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       const botReply = typeof data.message === 'string' && data.message.trim()
         ? data.message.trim()
         : 'I could not generate a response right now.';
+      const shouldOfferEmailAdmin =
+        shouldOfferEmailAdminFromPrompt || data.needsHumanSupport === true;
+
+      this.showEmailAdminSuggestion.set(shouldOfferEmailAdmin);
 
       this.whateelbotService.updateMessage(thinkingMessage.id, {
         text: botReply,
@@ -247,5 +257,30 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
 
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
+  }
+
+  private shouldOfferEmailAdmin(userPrompt: string): boolean {
+    const normalizedPrompt = userPrompt.toLowerCase();
+
+    const emailIntentTerms = [
+      'real person',
+      'someone real',
+      'talk to someone',
+      'talk with someone',
+      'human',
+      'email',
+      'e-mail',
+      'contact admin',
+      'admin',
+      'support',
+      'support agent',
+      'representative',
+      'help desk',
+      'human support',
+      'customer service',
+      'customer support',
+    ];
+
+    return emailIntentTerms.some((term) => normalizedPrompt.includes(term));
   }
 }

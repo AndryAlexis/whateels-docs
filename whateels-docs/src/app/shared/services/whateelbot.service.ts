@@ -9,6 +9,8 @@ export type WhateelbotMessage = {
   text: string;
   createdAt: number;
   status: WhateelbotMessageStatus;
+  actionLabel?: string;
+  actionType?: 'email-admin';
 };
 
 @Injectable({
@@ -50,7 +52,10 @@ export class WhateelbotService {
     return this.appendMessage('bot', text, 'thinking');
   }
 
-  updateMessage(id: string, patch: Partial<Pick<WhateelbotMessage, 'text' | 'status'>>): void {
+  updateMessage(
+    id: string,
+    patch: Partial<Pick<WhateelbotMessage, 'text' | 'status' | 'actionLabel' | 'actionType'>>
+  ): void {
     this.messages.update((current) =>
       current.map((message) => (message.id === id ? { ...message, ...patch } : message))
     );

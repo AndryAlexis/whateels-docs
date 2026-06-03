@@ -85,13 +85,36 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
+    const supportIntentTerms = [
+      'real person',
+      'someone real',
+      'human',
+      'human support',
+      'support agent',
+      'customer support',
+      'contact support',
+      'contact admin',
+      'admin',
+      'email',
+      'e-mail',
+      'help desk',
+      'talk to someone',
+      'talk with someone',
+      'representative',
+    ];
+
+    const normalizedMessage = message.toLowerCase();
+    const supportIntentFromPrompt = supportIntentTerms.some((term) =>
+      normalizedMessage.includes(term)
+    );
+
     const response = await openAiClient.responses.create({
       model: process.env['OPENAI_MODEL'] ?? 'gpt-4.1-mini',
       input: [
         {
           role: 'system',
           content:
-            'You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website.',
+            'You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website. Highest priority rule: detect when the user wants human help (real person, admin, customer support, representative, email contact, talk to someone). If that intent is present, start your reply with the exact token [[NEEDS_ADMIN_SUPPORT]] and then provide a short helpful response that explicitly tells the user there is a button right below your message to contact the admin/support team.',
         },
         {
           role: 'user',
@@ -100,8 +123,22 @@ app.post('/api/chat', async (req, res) => {
       ],
     });
 
-    const reply = response.output_text?.trim() || 'I could not generate a response right now.';
-    res.json({ message: reply });
+    const rawReply = response.output_text?.trim() || 'I could not generate a response right now.';
+    const supportToken = '[[NEEDS_ADMIN_SUPPORT]]';
+    const supportIntentFromModel = rawReply.startsWith(supportToken);
+    const extractedReply = supportIntentFromModel
+      ? rawReply.slice(supportToken.length).trim() || 'I can help you contact the admin team.'
+      : rawReply;
+    const needsHumanSupport = supportIntentFromPrompt || supportIntentFromModel;
+    const shouldMentionButton = needsHumanSupport && !/button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
+    const reply = shouldMentionButton
+      ? `${extractedReply} I enabled a button right below this message so you can contact the admin team quickly.`
+      : extractedReply;
+
+    res.json({
+      message: reply,
+      needsHumanSupport,
+    });
   } catch (error) {
     console.error('OpenAI request failed:', error);
     res.status(500).json({ message: 'Failed to generate a response.' });

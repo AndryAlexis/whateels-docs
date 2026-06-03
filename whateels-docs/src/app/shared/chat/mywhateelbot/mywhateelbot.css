@@ -129,6 +129,23 @@
                 animation: spin 1s linear infinite;
                 margin-right: 0.5rem;
             }
+
+            & .message-action-button {
+                margin-top: 0.5rem;
+                padding: 0.35rem 0.6rem;
+                border: 1px solid var(--ui-brand-secondary);
+                border-radius: 999px;
+                background-color: #ffffff;
+                color: var(--ui-brand-secondary);
+                cursor: pointer;
+                font-size: 0.7rem;
+                line-height: 1;
+
+                &:hover {
+                    background-color: var(--ui-brand-secondary);
+                    color: #ffffff;
+                }
+            }
         }
 
         & .user-bubble {

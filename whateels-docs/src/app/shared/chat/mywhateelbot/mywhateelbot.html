@@ -26,7 +26,9 @@
     <footer class="chat-footer">
         <div class="suggestions">
             <button>What can I ask you?</button>
-            <button (click)="openEmailAdmin()">I'd rather to email the admin</button>
+            @if (showEmailAdminSuggestion()) {
+                <button (click)="openEmailAdmin()">{{ emailAdminActionLabel }}</button>
+            }
         </div>
         <form class="input-group" (submit)="sendMessage($event)">
             <div class="text-input-container">
