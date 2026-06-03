@@ -3,7 +3,7 @@ import { Component, computed, ElementRef, inject, PLATFORM_ID } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, map, of, scan, startWith, switchMap } from 'rxjs';
+import { catchError, map, of, scan, startWith, switchMap, timeout } from 'rxjs';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
@@ -36,6 +36,7 @@ export class Main {
   private readonly observableSectionService = inject(ObservableSectionService);
   private readonly markdownState = toSignal(
     this.route.paramMap.pipe(
+      startWith(this.route.snapshot.paramMap),
       map((params) => {
         const category = this.normalizePathSegment(params.get('category')) ?? 'category_0';
         const page = this.normalizePathSegment(params.get('page')) ?? 'introduction';
@@ -49,6 +50,7 @@ export class Main {
         const title = this.formatFileName(page);
 
         return this.http.get(src, { responseType: 'text' }).pipe(
+          timeout(10000),
           map((content): MarkdownEvent => ({ type: 'loaded', title, content })),
           startWith({ type: 'loading' } as MarkdownEvent),
           catchError(() => of({ type: 'error' } as MarkdownEvent))
@@ -76,8 +78,16 @@ export class Main {
   readonly isMarkdownLoading = computed(() => this.markdownState().isLoading);
   readonly markdownContent = computed(() => this.markdownState().content);
   readonly pageTitle = computed(() => this.markdownState().title);
+  private lastSectionContent = '';
 
   onMarkdownReady(): void {
+    const content = this.markdownContent();
+
+    if (!content || content === this.lastSectionContent) {
+      return;
+    }
+
+    this.lastSectionContent = content;
     this.assignSectionIds();
   }
 

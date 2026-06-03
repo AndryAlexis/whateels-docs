@@ -3,7 +3,7 @@ import { Component, ElementRef, HostBinding, inject, PLATFORM_ID, ViewChild } fr
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, combineLatest, map, of } from 'rxjs';
+import { catchError, combineLatest, map, of, timeout } from 'rxjs';
 import { Section } from './section/section';
 import { Logo } from '../logo/logo';
 import { LeftSidebarService } from '../services/leftsidebar.service';
@@ -27,7 +27,7 @@ export class LeftSidebar {
   readonly sections = toSignal(
     combineLatest([
       this.http.get<PagesIndexResponse>('/api/pages-index').pipe(
-        catchError(() => this.http.get<PagesIndexResponse>('assets/pages-index.json')),
+        timeout(5000),
         catchError(() => of({ categories: [] }))
       ),
       this.route.paramMap.pipe(map((params) => params.get('page'))),

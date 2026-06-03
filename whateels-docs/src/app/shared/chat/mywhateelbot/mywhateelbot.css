@@ -145,7 +145,7 @@
     & .chat-footer {
         display: flex;
         flex-direction: column;
-        padding: 0 0.5rem 0.5rem 0.5rem;
+        padding: 0 0.5rem 1rem 0.5rem;
         gap: 0.5rem;
 
         & .suggestions {
@@ -173,23 +173,52 @@
         }
 
         & .input-group {
-            flex: 1;
             display: flex;
             align-items: flex-end;
             gap: 0.25rem;
 
-            & > textarea {
+            & .text-input-container {
                 flex: 1;
-                padding: 0.5rem;
-                border: 1px solid #ccc;
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+
+                position: relative;
+            }
+
+            & .text-input-counter {
+                font-size: 0.65rem;
+                color: var(--ui-accent-light);
+
+                background-color: white;
+                padding: 0.25rem;
+                border-radius: 4px;
+                border: 1px solid var(--ui-accent-light);
+                width: fit-content;
+                position: absolute;
+                bottom: -0.5rem;
+                right: 0.5rem;
+            }
+
+            & textarea {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+                border: 1px solid var(--ui-accent-light);
                 border-radius: 7px;
                 font: inherit;
                 line-height: 1.2rem;
                 resize: none;
                 overflow-y: hidden;
-                min-height: calc(1.2rem + 1rem + 2px);
-                max-height: calc(1.2rem * 3 + 1rem + 2px);
+                min-height: calc(1.2rem + 0.5rem + 0.75rem + 2px);
+                max-height: calc(1.2rem * 3 + 0.5rem + 0.75rem + 2px);
                 color: var(--ui-accent-dark);
+                background-color: #f8fafc;
+                font-size: 0.8rem;
+
+                &::placeholder {
+                    color: var(--ui-accent-light);
+                }
                 &:focus {
                     outline: 1px solid var(--ui-brand-secondary);
                 }
@@ -212,6 +241,11 @@
                 }
             }
         }
+    }
+
+    & .message-max-length-exceeded {
+        border: 1px solid #ef4444;
+        color: #b91c1c;
     }
 }
 

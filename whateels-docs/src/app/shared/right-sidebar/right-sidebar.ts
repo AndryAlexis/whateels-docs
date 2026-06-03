@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, timeout } from 'rxjs';
 import { ObservableSectionService } from '../services/observable-section.service';
 
 @Component({
@@ -25,6 +25,7 @@ export class RightSidebar {
       }),
       switchMap((src) =>
         this.http.get(src, { responseType: 'text' }).pipe(
+          timeout(10000),
           map((markdown) => this.extractH2Sections(markdown)),
           catchError(() => of([]))
         )

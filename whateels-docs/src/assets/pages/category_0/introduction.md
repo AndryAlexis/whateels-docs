@@ -65,7 +65,7 @@ Autolink style: <https://www.npmjs.com/package/ngx-markdown>
 
 Image example:
 
-![Sample placeholder image](https://via.placeholder.com/720x180.png?text=Markdown+Image+Example)
+![Sample image](data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22720%22%20height%3D%22180%22%20viewBox%3D%220%200%20720%20180%22%3E%3Crect%20width%3D%22720%22%20height%3D%22180%22%20fill%3D%22%23f8fafc%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2230%22%20fill%3D%22%23334155%22%3EMarkdown%20Image%20Example%3C/text%3E%3C/svg%3E)
 
 ---
 
@@ -190,7 +190,7 @@ Reference image:
 ![Reference image alt text][sample-image]
 
 [angular-link]: https://angular.dev "Angular Documentation"
-[sample-image]: https://via.placeholder.com/560x140.png?text=Reference+Image "Reference Image Title"
+[sample-image]: data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22560%22%20height%3D%22140%22%20viewBox%3D%220%200%20560%20140%22%3E%3Crect%20width%3D%22560%22%20height%3D%22140%22%20fill%3D%22%23eef2ff%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2226%22%20fill%3D%22%231e3a8a%22%3EReference%20Image%3C/text%3E%3C/svg%3E "Reference Image Title"
 
 ---
 
