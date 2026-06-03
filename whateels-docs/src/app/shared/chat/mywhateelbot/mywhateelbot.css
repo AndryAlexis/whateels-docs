@@ -211,15 +211,15 @@
             & textarea {
                 width: 100%;
                 box-sizing: border-box;
-                padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+                padding: 0.75rem;
                 border: 1px solid var(--ui-accent-light);
                 border-radius: 7px;
                 font: inherit;
                 line-height: 1.2rem;
                 resize: none;
                 overflow-y: hidden;
-                min-height: calc(1.2rem + 0.5rem + 0.75rem + 2px);
-                max-height: calc(1.2rem * 3 + 0.5rem + 0.75rem + 2px);
+                min-height: calc(1.2rem + 0.75rem + 0.75rem + 2px);
+                max-height: calc(1.2rem * 3 + 0.75rem + 0.75rem + 2px);
                 color: var(--ui-accent-dark);
                 background-color: #f8fafc;
                 font-size: 0.8rem;
