@@ -8,20 +8,64 @@ import 'dotenv/config';
 import express from 'express';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import OpenAI from 'openai';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const pagesIndexCacheTtlMs = 60_000;
+
+type PagesIndexResponse = {
+  categories: Array<{
+    name: string;
+    pages: string[];
+  }>;
+};
+
+let pagesIndexCache: {
+  expiresAt: number;
+  payload: PagesIndexResponse;
+} | null = null;
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
-const openAiClient = process.env['OPENAI_API_KEY']
-  ? new OpenAI({ apiKey: process.env['OPENAI_API_KEY'] })
-  : null;
 
 app.use(express.json());
 
+app.post('/chat', async (req, res) => {
+  const chatApiUrl = process.env['CHAT_API_URL']?.replace(/\/$/, '');
+
+  if (!chatApiUrl) {
+    res.status(500).json({
+      message: `I'm unable to reach the AI service right now. If you'd like, you can contact the WhatEELS team using the button below this message.`,
+      needsHumanSupport: true,
+    });
+    return;
+  }
+
+  try {
+    const upstream = await fetch(`${chatApiUrl}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+
+    const data = await upstream.json() as unknown;
+    res.status(upstream.status).json(data);
+  } catch {
+    res.status(500).json({
+      message: `I'm having trouble reaching the AI service right now. If you'd like, you can contact the WhatEELS team using the button below this message.`,
+      needsHumanSupport: true,
+    });
+  }
+});
+
 app.get('/api/pages-index', async (_req, res) => {
   try {
+    const now = Date.now();
+
+    if (pagesIndexCache && pagesIndexCache.expiresAt > now) {
+      res.json(pagesIndexCache.payload);
+      return;
+    }
+
     const candidateRoots = [
       join(browserDistFolder, 'assets', 'pages'),
       join(process.cwd(), 'src', 'assets', 'pages'),
@@ -65,70 +109,17 @@ app.get('/api/pages-index', async (_req, res) => {
     );
 
     categories.sort((a, b) => a.name.localeCompare(b.name));
-    res.json({ categories });
+
+    const payload: PagesIndexResponse = { categories };
+    pagesIndexCache = {
+      expiresAt: now + pagesIndexCacheTtlMs,
+      payload,
+    };
+
+    res.json(payload);
   } catch {
+    pagesIndexCache = null;
     res.status(500).json({ categories: [] });
-  }
-});
-
-app.post('/api/chat', async (req, res) => {
-  const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
-  const humanHandoffSentence =
-    "If you'd like, you can contact the WhatEELS team using the button below this message.";
-
-  if (!message) {
-    res.status(400).json({ message: 'Message is required.' });
-    return;
-  }
-
-  if (!openAiClient) {
-    res.status(500).json({
-      message: `I'm unable to answer right now because the AI service is not configured. ${humanHandoffSentence}`,
-      needsHumanSupport: true,
-    });
-    return;
-  }
-
-  try {
-    const response = await openAiClient.responses.create({
-      model: process.env['OPENAI_MODEL'] ?? 'gpt-4.1-mini',
-      input: [
-        {
-          role: 'system',
-          content:
-            `You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website. Highest priority rule: detect when the user is uncomfortable/confused with AI or wants human help (real person, admin, customer support, representative, email contact, talk to someone). If that intent is present, start your reply with the exact token [[NEEDS_ADMIN_SUPPORT]] and include this exact sentence once at the end of your reply: "${humanHandoffSentence}".`,
-        },
-        {
-          role: 'user',
-          content: message,
-        },
-      ],
-    });
-
-    const rawReply = response.output_text?.trim() || 'I could not generate a response right now.';
-    const supportToken = '[[NEEDS_ADMIN_SUPPORT]]';
-    const supportIntentFromModel = rawReply.startsWith(supportToken);
-    const extractedReply = supportIntentFromModel
-      ? rawReply.slice(supportToken.length).trim() || 'I can help you contact the admin team.'
-      : rawReply;
-    const includesHandoffSentence = extractedReply.includes(humanHandoffSentence);
-    const supportIntentFromReply = /real person|human|admin|support team|contact the admin|contact support|button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
-    const needsHumanSupport = supportIntentFromModel || includesHandoffSentence || supportIntentFromReply;
-    const shouldMentionButton = needsHumanSupport && !includesHandoffSentence;
-    const reply = shouldMentionButton
-      ? `${extractedReply} ${humanHandoffSentence}`
-      : extractedReply;
-
-    res.json({
-      message: reply,
-      needsHumanSupport,
-    });
-  } catch (error) {
-    console.error('OpenAI request failed:', error);
-    res.status(500).json({
-      message: `I'm having trouble generating a reply right now. ${humanHandoffSentence}`,
-      needsHumanSupport: true,
-    });
   }
 });
 

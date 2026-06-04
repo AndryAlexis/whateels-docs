@@ -1,13 +1,11 @@
 import { AfterViewInit, Component, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription, TimeoutError, timeout } from 'rxjs';
 import { WhateelbotService } from '../../services/whateelbot.service';
+import { WhateelbotApiService } from '../../services/whateelbot-api.service';
 import { EmailAdminService } from '../../services/email-admin.service';
 import { ChatService } from '../../services/chat.service';
-
-type ChatApiResponse = {
-  message?: string;
-  needsHumanSupport?: boolean;
-};
 
 @Component({
   selector: 'app-mywhateelbot',
@@ -19,18 +17,19 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly chatService = inject(ChatService);
   private readonly whateelbotService = inject(WhateelbotService);
+  private readonly whateelbotApiService = inject(WhateelbotApiService);
   private readonly emailAdminService = inject(EmailAdminService);
   @ViewChild('chatBody') private chatBody?: ElementRef<HTMLElement>;
   @ViewChild('messageInput') private messageInput?: ElementRef<HTMLTextAreaElement>;
   readonly messages = this.whateelbotService.messages;
   readonly messageMaxLength = 250;
   readonly showEmailAdminSuggestion = signal(false);
+  readonly isPending = signal(false);
   readonly draftMessage = signal('');
   private readonly humanHandoffSentence =
     "If you'd like, you can contact the WhatEELS team using the button below this message.";
-  private readonly chatRequestTimeoutMs = 15000;
   private pendingScrollFrame: number | null = null;
-  private readonly pendingRequestControllers = new Set<AbortController>();
+  private pendingSubscription: Subscription | null = null;
   private lastInputContentHeight = 0;
   private lastInputLineBreakCount = 0;
 
@@ -63,18 +62,19 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
     }
 
     event.preventDefault();
-    void this.sendMessage();
+    this.sendMessage();
   }
 
-  async sendMessage(event?: SubmitEvent): Promise<void> {
+  sendMessage(event?: SubmitEvent): void {
     event?.preventDefault();
 
     const message = this.draftMessage().trim();
 
-    if (!message) {
+    if (!message || this.isPending()) {
       return;
     }
 
+    this.isPending.set(true);
     this.showEmailAdminSuggestion.set(false);
 
     this.whateelbotService.addUserMessage(message);
@@ -82,76 +82,48 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
     this.resetDraftMessage();
     this.queueScrollToBottom();
 
-    const requestController = new AbortController();
-    this.pendingRequestControllers.add(requestController);
-    const timeoutId = window.setTimeout(() => {
-      requestController.abort();
-    }, this.chatRequestTimeoutMs);
+    this.pendingSubscription?.unsubscribe();
+    this.pendingSubscription = this.whateelbotApiService
+      .send(message)
+      .pipe(timeout(15000))
+      .subscribe({
+        next: (data) => {
+          const botReply =
+            typeof data.message === 'string' && data.message.trim()
+              ? data.message.trim()
+              : 'I could not generate a response right now.';
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+          this.showEmailAdminSuggestion.set(data.needsHumanSupport === true);
+          this.whateelbotService.updateMessage(thinkingMessage.id, { text: botReply, status: 'sent' });
+          this.queueScrollToBottom();
+          this.isPending.set(false);
         },
-        body: JSON.stringify({ message }),
-        signal: requestController.signal,
+        error: (err: unknown) => {
+          let fallbackMessage: string;
+
+          if (err instanceof TimeoutError) {
+            fallbackMessage = `The request took too long and I couldn't complete the response. ${this.humanHandoffSentence}`;
+          } else if (
+            err instanceof HttpErrorResponse &&
+            typeof err.error?.message === 'string' &&
+            err.error.message.trim()
+          ) {
+            fallbackMessage = this.ensureHumanHandoffHint(err.error.message.trim());
+          } else {
+            fallbackMessage = `Sorry, I cannot answer right now. ${this.humanHandoffSentence}`;
+          }
+
+          this.showEmailAdminSuggestion.set(true);
+          this.whateelbotService.failMessage(thinkingMessage.id, fallbackMessage);
+          this.queueScrollToBottom();
+          this.isPending.set(false);
+        },
       });
-
-      if (!response.ok) {
-        let errorData: ChatApiResponse | null = null;
-
-        try {
-          errorData = (await response.json()) as ChatApiResponse;
-        } catch {
-          // Keep fallback below when JSON body is unavailable.
-        }
-
-        const errorReply =
-          typeof errorData?.message === 'string' && errorData.message.trim()
-            ? errorData.message.trim()
-            : `I'm having trouble replying right now. ${this.humanHandoffSentence}`;
-
-        this.showEmailAdminSuggestion.set(true);
-        this.whateelbotService.failMessage(
-          thinkingMessage.id,
-          this.ensureHumanHandoffHint(errorReply)
-        );
-        this.queueScrollToBottom();
-        return;
-      }
-
-      const data = (await response.json()) as ChatApiResponse;
-      const botReply = typeof data.message === 'string' && data.message.trim()
-        ? data.message.trim()
-        : 'I could not generate a response right now.';
-      this.showEmailAdminSuggestion.set(data.needsHumanSupport === true);
-
-      this.whateelbotService.updateMessage(thinkingMessage.id, {
-        text: botReply,
-        status: 'sent',
-      });
-      this.queueScrollToBottom();
-    } catch (error) {
-      console.error('Chat request failed:', error);
-      this.showEmailAdminSuggestion.set(true);
-      const fallbackMessage =
-        error instanceof DOMException && error.name === 'AbortError'
-          ? `The request took too long and I couldn't complete the response. ${this.humanHandoffSentence}`
-          : `Sorry, I cannot answer right now. ${this.humanHandoffSentence}`;
-
-      this.whateelbotService.failMessage(
-        thinkingMessage.id,
-        this.ensureHumanHandoffHint(fallbackMessage)
-      );
-      this.queueScrollToBottom();
-    } finally {
-      window.clearTimeout(timeoutId);
-      this.pendingRequestControllers.delete(requestController);
-    }
   }
 
   ngOnDestroy(): void {
+    this.pendingSubscription?.unsubscribe();
+
     if (!this.isBrowser()) {
       return;
     }
@@ -160,12 +132,6 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       window.cancelAnimationFrame(this.pendingScrollFrame);
       this.pendingScrollFrame = null;
     }
-
-    for (const requestController of this.pendingRequestControllers) {
-      requestController.abort();
-    }
-
-    this.pendingRequestControllers.clear();
   }
 
   openEmailAdmin(): void {
