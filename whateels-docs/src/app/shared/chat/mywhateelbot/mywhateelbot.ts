@@ -26,6 +26,8 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
   readonly messageMaxLength = 250;
   readonly showEmailAdminSuggestion = signal(false);
   readonly draftMessage = signal('');
+  private readonly humanHandoffSentence =
+    "If you'd like, you can contact the WhatEELS team using the button below this message.";
   private readonly chatRequestTimeoutMs = 15000;
   private pendingScrollFrame: number | null = null;
   private readonly pendingRequestControllers = new Set<AbortController>();
@@ -97,7 +99,26 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       });
 
       if (!response.ok) {
-        throw new Error(`Chat endpoint failed with status ${response.status}`);
+        let errorData: ChatApiResponse | null = null;
+
+        try {
+          errorData = (await response.json()) as ChatApiResponse;
+        } catch {
+          // Keep fallback below when JSON body is unavailable.
+        }
+
+        const errorReply =
+          typeof errorData?.message === 'string' && errorData.message.trim()
+            ? errorData.message.trim()
+            : `I'm having trouble replying right now. ${this.humanHandoffSentence}`;
+
+        this.showEmailAdminSuggestion.set(true);
+        this.whateelbotService.failMessage(
+          thinkingMessage.id,
+          this.ensureHumanHandoffHint(errorReply)
+        );
+        this.queueScrollToBottom();
+        return;
       }
 
       const data = (await response.json()) as ChatApiResponse;
@@ -113,14 +134,15 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       this.queueScrollToBottom();
     } catch (error) {
       console.error('Chat request failed:', error);
+      this.showEmailAdminSuggestion.set(true);
       const fallbackMessage =
         error instanceof DOMException && error.name === 'AbortError'
-          ? 'The request took too long. Please try again.'
-          : 'Sorry, I cannot answer right now. Please try again in a moment.';
+          ? `The request took too long and I couldn't complete the response. ${this.humanHandoffSentence}`
+          : `Sorry, I cannot answer right now. ${this.humanHandoffSentence}`;
 
       this.whateelbotService.failMessage(
         thinkingMessage.id,
-        fallbackMessage
+        this.ensureHumanHandoffHint(fallbackMessage)
       );
       this.queueScrollToBottom();
     } finally {
@@ -252,5 +274,15 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
 
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
+  }
+
+  private ensureHumanHandoffHint(text: string): string {
+    const normalizedText = text.trim();
+
+    if (/whateels\s+team|button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(normalizedText)) {
+      return normalizedText;
+    }
+
+    return `${normalizedText} ${this.humanHandoffSentence}`;
   }
 }

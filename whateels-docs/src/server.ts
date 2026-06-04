@@ -73,6 +73,8 @@ app.get('/api/pages-index', async (_req, res) => {
 
 app.post('/api/chat', async (req, res) => {
   const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
+  const humanHandoffSentence =
+    "If you'd like, you can contact the WhatEELS team using the button below this message.";
 
   if (!message) {
     res.status(400).json({ message: 'Message is required.' });
@@ -80,41 +82,21 @@ app.post('/api/chat', async (req, res) => {
   }
 
   if (!openAiClient) {
-    res.status(500).json({ message: 'OPENAI_API_KEY is not configured on the server.' });
+    res.status(500).json({
+      message: `I'm unable to answer right now because the AI service is not configured. ${humanHandoffSentence}`,
+      needsHumanSupport: true,
+    });
     return;
   }
 
   try {
-    const supportIntentTerms = [
-      'real person',
-      'someone real',
-      'human',
-      'human support',
-      'support agent',
-      'customer support',
-      'contact support',
-      'contact admin',
-      'admin',
-      'email',
-      'e-mail',
-      'help desk',
-      'talk to someone',
-      'talk with someone',
-      'representative',
-    ];
-
-    const normalizedMessage = message.toLowerCase();
-    const supportIntentFromPrompt = supportIntentTerms.some((term) =>
-      normalizedMessage.includes(term)
-    );
-
     const response = await openAiClient.responses.create({
       model: process.env['OPENAI_MODEL'] ?? 'gpt-4.1-mini',
       input: [
         {
           role: 'system',
           content:
-            'You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website. Highest priority rule: detect when the user wants human help (real person, admin, customer support, representative, email contact, talk to someone). If that intent is present, start your reply with the exact token [[NEEDS_ADMIN_SUPPORT]] and then provide a short helpful response that explicitly tells the user there is a button right below your message to contact the admin/support team.',
+            `You are WhatEELBot, a concise and helpful assistant for the WhatEels documentation website. Highest priority rule: detect when the user is uncomfortable/confused with AI or wants human help (real person, admin, customer support, representative, email contact, talk to someone). If that intent is present, start your reply with the exact token [[NEEDS_ADMIN_SUPPORT]] and include this exact sentence once at the end of your reply: "${humanHandoffSentence}".`,
         },
         {
           role: 'user',
@@ -129,11 +111,12 @@ app.post('/api/chat', async (req, res) => {
     const extractedReply = supportIntentFromModel
       ? rawReply.slice(supportToken.length).trim() || 'I can help you contact the admin team.'
       : rawReply;
+    const includesHandoffSentence = extractedReply.includes(humanHandoffSentence);
     const supportIntentFromReply = /real person|human|admin|support team|contact the admin|contact support|button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
-    const needsHumanSupport = supportIntentFromPrompt || supportIntentFromModel || supportIntentFromReply;
-    const shouldMentionButton = needsHumanSupport && !/button\s+(right\s+)?below|below\s+(this\s+)?message/i.test(extractedReply);
+    const needsHumanSupport = supportIntentFromModel || includesHandoffSentence || supportIntentFromReply;
+    const shouldMentionButton = needsHumanSupport && !includesHandoffSentence;
     const reply = shouldMentionButton
-      ? `${extractedReply} I enabled a button right below this message so you can contact the admin team quickly.`
+      ? `${extractedReply} ${humanHandoffSentence}`
       : extractedReply;
 
     res.json({
@@ -142,7 +125,10 @@ app.post('/api/chat', async (req, res) => {
     });
   } catch (error) {
     console.error('OpenAI request failed:', error);
-    res.status(500).json({ message: 'Failed to generate a response.' });
+    res.status(500).json({
+      message: `I'm having trouble generating a reply right now. ${humanHandoffSentence}`,
+      needsHumanSupport: true,
+    });
   }
 });
 
