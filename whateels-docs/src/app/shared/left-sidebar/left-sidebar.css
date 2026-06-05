@@ -21,7 +21,7 @@
 
         & > nav {
             display: flex;
-            height: fit-content;
+            height: inherit;
             padding: var(--margin-header-content) 2rem;
 
             & > ul {
