@@ -1,23 +1,11 @@
 {
   "categories": [
     {
-      "name": "category_0",
+      "name": "introduction",
       "pages": [
-        "andry",
-        "introduction"
-      ]
-    },
-    {
-      "name": "category_1",
-      "pages": [
-        "test"
-      ]
-    },
-    {
-      "name": "category_2",
-      "pages": [
-        "test_1",
-        "test_1-copy"
+        "lens group",
+        "university of barcelona",
+        "whateels"
       ]
     }
   ]
