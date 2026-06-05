@@ -37,8 +37,10 @@ export class Main {
   private readonly markdownState = toSignal(
     this.route.paramMap.pipe(
       map((params) => {
-        const category = this.normalizePathSegment(params.get('category')) ?? 'category_0';
-        const page = this.normalizePathSegment(params.get('page')) ?? 'introduction';
+        const categorySlug = this.normalizePathSegment(params.get('category')) ?? 'introduction';
+        const pageSlug = this.normalizePathSegment(params.get('page')) ?? 'whateels';
+        const category = this.routeSegmentToFileName(categorySlug);
+        const page = this.routeSegmentToFileName(pageSlug);
 
         return {
           page,
@@ -135,5 +137,9 @@ export class Main {
       .replace(/[_.-]+/g, ' ')
       .trim()
       .replace(/\b\w/g, (letter) => letter.toUpperCase());
+  }
+
+  private routeSegmentToFileName(value: string): string {
+    return value.replace(/-/g, ' ');
   }
 }

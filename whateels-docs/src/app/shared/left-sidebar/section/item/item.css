@@ -12,6 +12,7 @@
         padding: 0.5rem 1rem;
         border-left: 1px solid var(--ui-accent-light);
         position: relative;
+        text-transform: capitalize;
 
         &:not(.active):hover {
             color: var(--ui-accent-normal);

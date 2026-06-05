@@ -72,3 +72,12 @@ A common end-to-end workflow looks like this:
 
 ## In short
 WhatEELS is a practical, interactive EELS analysis workspace that helps users go from raw spectra to interpretable clustering, fitting, and quantification results in one consistent tool.
+
+---
+
+## Project Contributors
+The following people have participated in the WhatEELS project so far:
+
+- Vanessa Costa Ledesma
+- [Andry Alexis Reyes Cruz](https://es.linkedin.com/in/andryalexisreyescruz)
+

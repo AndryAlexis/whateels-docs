@@ -39,8 +39,8 @@ export class LeftSidebar {
           title: category.name,
           items: category.pages.map((page) => ({
             name: page,
-            href: `/${category.name}/${page}`,
-            isActive: page === currentPage,
+            href: `/${this.slugify(category.name)}/${this.slugify(page)}`,
+            isActive: this.slugify(page) === currentPage,
           })),
         }))
       )
@@ -78,5 +78,16 @@ export class LeftSidebar {
     requestAnimationFrame(() => {
       container.scrollTop = Number(saved) || 0;
     });
+  }
+
+  private slugify(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
   }
 }

@@ -19,9 +19,12 @@ export class RightSidebar {
   readonly sections = toSignal(
     this.route.paramMap.pipe(
       map((params) => {
-        const category = this.normalizePathSegment(params.get('category'));
-        const page = this.normalizePathSegment(params.get('page'));
-        return `assets/pages/${category ?? 'category_0'}/${page ?? 'introduction'}.md`;
+        const categorySlug = this.normalizePathSegment(params.get('category')) ?? 'introduction';
+        const pageSlug = this.normalizePathSegment(params.get('page')) ?? 'whateels';
+        const category = this.routeSegmentToFileName(categorySlug);
+        const page = this.routeSegmentToFileName(pageSlug);
+
+        return `assets/pages/${category}/${page}.md`;
       }),
       switchMap((src) =>
         this.http.get(src, { responseType: 'text' }).pipe(
@@ -78,5 +81,9 @@ export class RightSidebar {
     }
 
     return /^[A-Za-z0-9_-]+$/.test(value) ? value : null;
+  }
+
+  private routeSegmentToFileName(value: string): string {
+    return value.replace(/-/g, ' ');
   }
 }
