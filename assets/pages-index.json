@@ -7,6 +7,17 @@
         "university of barcelona",
         "whateels"
       ]
+    },
+    {
+      "name": "whateels pages",
+      "pages": [
+        "advanced clustering",
+        "clustering",
+        "fitting",
+        "home",
+        "metadata",
+        "quantification"
+      ]
     }
   ]
 }
