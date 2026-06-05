@@ -6,23 +6,9 @@ import {
 } from '@angular/ssr/node';
 import 'dotenv/config';
 import express from 'express';
-import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
-const pagesIndexCacheTtlMs = 60_000;
-
-type PagesIndexResponse = {
-  categories: Array<{
-    name: string;
-    pages: string[];
-  }>;
-};
-
-let pagesIndexCache: {
-  expiresAt: number;
-  payload: PagesIndexResponse;
-} | null = null;
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
@@ -54,72 +40,6 @@ app.post('/chat', async (req, res) => {
       message: `I'm having trouble reaching the AI service right now. If you'd like, you can contact the WhatEELS team using the button below this message.`,
       needsHumanSupport: true,
     });
-  }
-});
-
-app.get('/api/pages-index', async (_req, res) => {
-  try {
-    const now = Date.now();
-
-    if (pagesIndexCache && pagesIndexCache.expiresAt > now) {
-      res.json(pagesIndexCache.payload);
-      return;
-    }
-
-    const candidateRoots = [
-      join(browserDistFolder, 'assets', 'pages'),
-      join(process.cwd(), 'src', 'assets', 'pages'),
-    ];
-
-    let pagesRoot: string | null = null;
-    let categoryEntries: Array<{ name: string; isDirectory: () => boolean }> | null = null;
-
-    for (const candidateRoot of candidateRoots) {
-      try {
-        categoryEntries = await readdir(candidateRoot, { withFileTypes: true });
-        pagesRoot = candidateRoot;
-        break;
-      } catch {
-        // Try next location.
-      }
-    }
-
-    if (!pagesRoot || !categoryEntries) {
-      throw new Error('Pages root folder was not found.');
-    }
-
-    const categories = await Promise.all(
-      categoryEntries
-        .filter((entry) => entry.isDirectory())
-        .map(async (entry) => {
-          const categoryName = entry.name;
-          const categoryPath = join(pagesRoot, categoryName);
-          const pageEntries = await readdir(categoryPath, { withFileTypes: true });
-
-          const pages = pageEntries
-            .filter((pageEntry) => pageEntry.isFile() && pageEntry.name.endsWith('.md'))
-            .map((pageEntry) => pageEntry.name.slice(0, -3))
-            .sort((a, b) => a.localeCompare(b));
-
-          return {
-            name: categoryName,
-            pages,
-          };
-        })
-    );
-
-    categories.sort((a, b) => a.name.localeCompare(b.name));
-
-    const payload: PagesIndexResponse = { categories };
-    pagesIndexCache = {
-      expiresAt: now + pagesIndexCacheTtlMs,
-      payload,
-    };
-
-    res.json(payload);
-  } catch {
-    pagesIndexCache = null;
-    res.status(500).json({ categories: [] });
   }
 });
 

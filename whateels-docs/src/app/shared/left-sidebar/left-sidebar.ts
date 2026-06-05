@@ -24,12 +24,14 @@ export class LeftSidebar {
   private readonly scrollStorageKey = 'left-sidebar-scroll-top';
   @ViewChild('sidebarScrollContainer') private readonly sidebarScrollContainer?: ElementRef<HTMLElement>;
 
+  private readonly pagesIndex$ = this.http.get<PagesIndexResponse>('assets/pages-index.json').pipe(
+    timeout(5000),
+    catchError(() => of({ categories: [] }))
+  );
+
   readonly sections = toSignal(
     combineLatest([
-      this.http.get<PagesIndexResponse>('/api/pages-index').pipe(
-        timeout(5000),
-        catchError(() => of({ categories: [] }))
-      ),
+      this.pagesIndex$,
       this.route.paramMap.pipe(map((params) => params.get('page'))),
     ]).pipe(
       map(([response, currentPage]) =>
