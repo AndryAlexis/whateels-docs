@@ -5,6 +5,13 @@ The application is built with Python, Panel, and HoloViews, and runs as a local 
 
 ---
 
+## Download WhatEELS
+You can download the latest version of WhatEELS from the releases page on the next link:
+
+[Download WhatEELS](https://download-whateels-9k5k.onrender.com/)
+
+---
+
 ## Why WhatEELS exists
 EELS analysis often requires multiple disconnected tools and repeated context switching between scripts, plots, and files. WhatEELS brings these steps together so users can:
 
