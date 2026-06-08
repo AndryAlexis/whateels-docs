@@ -25,8 +25,6 @@ body {
   font-family: "Lexend", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
-
-  background-color: red !important; /* This is a temporary style to test if the global styles are applied correctly. Remove this line after confirming. */
 }
 
 html, body, div, span, applet, object, iframe,
