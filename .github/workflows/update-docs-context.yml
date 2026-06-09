@@ -29,6 +29,32 @@ jobs:
           echo "Files to update:"
           cat /tmp/changed_files.txt
 
+      - name: Delete removed categories from docs API
+        if: github.event_name == 'push'
+        run: |
+          # Subdirectory names from the previous commit
+          PREV_CATS=$(git ls-tree HEAD~1 whateels-docs/src/assets/pages/ 2>/dev/null \
+            | grep '^040000' | awk '{print $NF}' | xargs -I{} basename {} 2>/dev/null || true)
+
+          # Subdirectory names currently present on disk
+          CURR_CATS=$(find whateels-docs/src/assets/pages/ -mindepth 1 -maxdepth 1 -type d \
+            -exec basename {} \; 2>/dev/null || true)
+
+          echo "Previous categories: $PREV_CATS"
+          echo "Current  categories: $CURR_CATS"
+
+          while IFS= read -r cat; do
+            [ -z "$cat" ] && continue
+            if ! echo "$CURR_CATS" | grep -qxF "$cat"; then
+              ENCODED=$(printf '%s' "$cat" | jq -Rr @uri)
+              echo "Category removed: $cat — calling DELETE /docs?field=$ENCODED"
+              curl -f -s -X DELETE \
+                "https://whateels-docs-api.onrender.com/docs?field=${ENCODED}" \
+                && echo "✓ '$cat' deleted from Firestore" \
+                || echo "✗ Delete failed for '$cat'"
+            fi
+          done <<< "$PREV_CATS"
+
       - name: Post changed files to docs API
         run: |
           payload='{}'
