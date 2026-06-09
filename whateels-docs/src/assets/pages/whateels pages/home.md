@@ -1,6 +1,5 @@
 ## Introduction
-
-The Home page is the starting point of WhatEELS. Its primary function is file loading and initial dataset exploration.
+Test 1. The Home page is the starting point of WhatEELS. Its primary function is file loading and initial dataset exploration.
 
 ---
 
