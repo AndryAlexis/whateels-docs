@@ -1,0 +1,54 @@
+name: Update Docs Context
+
+on:
+  push:
+    branches:
+      - vanessa-way
+    paths:
+      - 'whateels-docs/src/assets/pages/**'
+  workflow_dispatch: {}
+
+jobs:
+  update-docs-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Gather changed markdown files
+        id: gather
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            find whateels-docs/src/assets/pages -name "*.md" > /tmp/changed_files.txt
+          else
+            git diff --name-only HEAD~1 HEAD -- whateels-docs/src/assets/pages/ \
+              | grep '\.md$' > /tmp/changed_files.txt || true
+          fi
+          echo "Files to update:"
+          cat /tmp/changed_files.txt
+
+      - name: Post changed files to docs API
+        run: |
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ -f "$file" ] || continue
+
+            FILENAME=$(basename "$file")
+            CONTENT=$(cat "$file")
+            UPDATED_BY="${{ github.actor }}"
+            UPDATED_AT=$(git log -1 --format="%cI" -- "$file" 2>/dev/null \
+              || date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+            echo "Posting: $FILENAME"
+            curl -f -s -X POST "https://whateels-docs-api.onrender.com/docs" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n \
+                --arg fn "$FILENAME" \
+                --arg fc "$CONTENT" \
+                --arg by "$UPDATED_BY" \
+                --arg at "$UPDATED_AT" \
+                '{ymlFileName: $fn, ymlContent: $fc, updatedBy: $by, updatedAt: $at}')" \
+              && echo "✓ $FILENAME saved" || echo "✗ $FILENAME failed"
+          done < /tmp/changed_files.txt
