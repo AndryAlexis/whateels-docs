@@ -32,11 +32,16 @@ jobs:
       - name: Delete removed categories from docs API
         if: github.event_name == 'push'
         run: |
-          # Directory names only from the previous commit (--name-only -d handles spaces safely)
-          git ls-tree --name-only -d HEAD~1 "whateels-docs/src/assets/pages/" \
-            > /tmp/prev_cats.txt 2>/dev/null || touch /tmp/prev_cats.txt
+          # git ls-tree output format: "<mode> <type> <hash>TAB<fullpath>"
+          # cut -f2 extracts the full path (tab-delimited, preserves spaces).
+          # basename then strips the prefix, leaving just the folder name.
+          git ls-tree HEAD~1 "whateels-docs/src/assets/pages/" 2>/dev/null \
+            | grep '^040000' \
+            | cut -f2 \
+            | while IFS= read -r p; do basename "$p"; done \
+            > /tmp/prev_cats.txt || touch /tmp/prev_cats.txt
 
-          # Directory names currently on disk
+          # Bare names from the current working tree
           find whateels-docs/src/assets/pages/ -mindepth 1 -maxdepth 1 -type d \
             -exec basename {} \; > /tmp/curr_cats.txt 2>/dev/null || touch /tmp/curr_cats.txt
 
