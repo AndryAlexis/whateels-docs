@@ -1,5 +1,5 @@
 ## Introduction
-Test 1.The Fitting page provides an interactive workflow for fitting spectral models to selected regions of a Spectrum Image dataset.
+The Fitting page provides an interactive workflow for fitting spectral models to selected regions of a Spectrum Image dataset.
 
 ---
 

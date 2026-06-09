@@ -1,5 +1,5 @@
 ## Quantification Page
-Test 1.The Quantification page enables elemental quantification of EELS spectra from a selected region of interest using cross-section models.
+The Quantification page enables elemental quantification of EELS spectra from a selected region of interest using cross-section models.
 
 ## Requirements
 - A DM3 or DM4 file with at least one Spectrum Image (SIm) dataset must be loaded on the Home page.
