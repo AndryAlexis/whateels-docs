@@ -31,24 +31,29 @@ jobs:
 
       - name: Post changed files to docs API
         run: |
+          payload='{}'
+
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             [ -f "$file" ] || continue
 
-            FILENAME=$(basename "$file")
+            CATEGORY=$(basename "$(dirname "$file")")
+            PAGENAME=$(basename "$file" .md)
             CONTENT=$(cat "$file")
-            UPDATED_BY="${{ github.actor }}"
-            UPDATED_AT=$(git log -1 --format="%cI" -- "$file" 2>/dev/null \
-              || date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-            echo "Posting: $FILENAME"
-            curl -f -s -X POST "https://whateels-docs-api.onrender.com/docs" \
-              -H "Content-Type: application/json" \
-              -d "$(jq -n \
-                --arg fn "$FILENAME" \
-                --arg fc "$CONTENT" \
-                --arg by "$UPDATED_BY" \
-                --arg at "$UPDATED_AT" \
-                '{ymlFileName: $fn, ymlContent: $fc, updatedBy: $by, updatedAt: $at}')" \
-              && echo "✓ $FILENAME saved" || echo "✗ $FILENAME failed"
+            echo "Adding: $CATEGORY / $PAGENAME"
+            payload=$(echo "$payload" | jq \
+              --arg cat "$CATEGORY" \
+              --arg page "$PAGENAME" \
+              --arg content "$CONTENT" \
+              '.[$cat][$page] = $content')
           done < /tmp/changed_files.txt
+
+          echo "Payload preview:"
+          echo "$payload" | jq 'to_entries | map({key, pages: (.value | keys)}) '
+
+          echo "Posting to API..."
+          curl -f -s -X POST "https://whateels-docs-api.onrender.com/docs" \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            && echo "✓ Docs context saved" || echo "✗ Post failed"
