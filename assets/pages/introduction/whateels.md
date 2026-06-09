@@ -1,5 +1,5 @@
 ## What is WhatEELS?
-Test 1. WhatEELS is an interactive web application for exploring and analyzing Electron Energy Loss Spectroscopy (EELS) datasets. It is designed to help researchers move from raw spectral data to interpretable results through visual, guided workflows.
+WhatEELS is an interactive web application for exploring and analyzing Electron Energy Loss Spectroscopy (EELS) datasets. It is designed to help researchers move from raw spectral data to interpretable results through visual, guided workflows.
 
 The application is built with Python, Panel, and HoloViews, and runs as a local browser app. It combines data inspection, metadata exploration, clustering, fitting, and quantification in a single environment.
 
