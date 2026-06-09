@@ -1,5 +1,5 @@
 ## Introduction
-Test 1. The Clustering page provides unsupervised spectral grouping of a Spectrum Image dataset using three classical clustering algorithms.
+The Clustering page provides unsupervised spectral grouping of a Spectrum Image dataset using three classical clustering algorithms.
 
 ---
 

@@ -1,5 +1,5 @@
 # Advanced Clustering Page
-Test 1. The Advanced Clustering page provides a non-linear dimensionality reduction and density-based clustering workflow using UMAP and HDBSCAN.
+The Advanced Clustering page provides a non-linear dimensionality reduction and density-based clustering workflow using UMAP and HDBSCAN.
 
 ---
 
