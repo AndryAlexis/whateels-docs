@@ -288,3 +288,11 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Solo afecta a navegadores WebKit (principalmente Safari) */
+@supports (-webkit-touch-callout: none) {
+  input.chat-input,
+  textarea.chat-input {
+    font-size: 16px !important;
+  }
+}
