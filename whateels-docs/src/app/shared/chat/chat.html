@@ -1,8 +1,8 @@
 <div class="chat" [style.display]="isChatOpen() ? 'flex' : 'none'">
     <div class="carrousel">
-        @if (isWhateelbotOpen()) {
-            <app-mywhateelbot></app-mywhateelbot>
-        } @else if (isEmailAdminOpen()) {
+        <app-mywhateelbot [style.display]="isWhateelbotOpen() ? 'block' : 'none'"></app-mywhateelbot>
+
+        @if (isEmailAdminOpen()) {
             <app-email-admin></app-email-admin>
         } @else if (isEmailStatusOpen()) {
             <app-email-status></app-email-status>
