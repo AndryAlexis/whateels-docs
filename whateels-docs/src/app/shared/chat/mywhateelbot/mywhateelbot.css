@@ -244,7 +244,7 @@
                 max-height: calc(1.2rem * 3 + 0.75rem + 0.75rem + 2px);
                 color: var(--ui-accent-dark);
                 background-color: #f8fafc;
-                font-size: 0.8rem;
+                font-size: 16px;
 
                 &.message-max-length-exceeded {
                     border: 1px solid #ef4444;
