@@ -157,3 +157,10 @@
 
     }
 }
+
+/* Only for iOS devices */
+@supports (-webkit-touch-callout: none) {
+  textarea, input[type="text"] {
+    font-size: 16px !important; /* Prevents iOS from zooming in on the textarea */
+  }
+}
