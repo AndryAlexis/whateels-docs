@@ -158,7 +158,18 @@ export class Mywhateelbot implements OnDestroy, AfterViewInit {
       textarea.value = '';
     }
 
-    window.requestAnimationFrame(() => this.resizeMessageInput());
+    window.requestAnimationFrame(() => {
+      this.resizeMessageInput();
+      this.focusMessageInput();
+    });
+  }
+
+  private focusMessageInput(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+
+    this.messageInput?.nativeElement.focus();
   }
 
   private queueScrollToBottom(): void {
