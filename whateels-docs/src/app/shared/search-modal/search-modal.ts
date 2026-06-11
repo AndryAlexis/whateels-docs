@@ -1,88 +1,104 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
-  effect,
-  ElementRef,
   HostBinding,
+  computed,
   inject,
-  PLATFORM_ID,
-  signal,
-  ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { SearchModalService } from '../services/search-modal.service';
 import { SlugifyPipe } from '../pipes/slugify.pipe';
+import { catchError, map, of, startWith, timeout } from 'rxjs';
+
+type PagesIndexResponse = {
+  categories: Array<{
+    name: string;
+    pages: string[];
+  }>;
+};
+
+type SearchResult = {
+  category: string;
+  page: string;
+  href: string;
+};
 
 @Component({
   selector: 'app-search-modal',
-  imports: [FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   providers: [SlugifyPipe],
   templateUrl: './search-modal.html',
   styleUrl: './search-modal.css',
 })
 export class SearchModal {
-  @ViewChild('searchInput') private readonly searchInput?: ElementRef<HTMLInputElement>;
+  private readonly http = inject(HttpClient);
+  private readonly slugifyPipe = inject(SlugifyPipe);
 
-  private readonly router = inject(Router);
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly searchStream$ = new Subject<string>();
+  readonly searchQuery = new FormControl('', { nonNullable: true });
+  readonly searchModalService = inject(SearchModalService);
+  private readonly allResults = toSignal(
+    this.http.get<PagesIndexResponse>('assets/pages-index.json').pipe(
+      timeout(5000),
+      map((response) =>
+        response.categories.flatMap((category) =>
+          category.pages.map((page) => ({
+            category: this.toTitleCase(category.name),
+            page: this.toTitleCase(page),
+            href: `/${this.slugifyPipe.transform(category.name)}/${this.slugifyPipe.transform(page)}`,
+          }))
+        )
+      ),
+      catchError(() => of([] as SearchResult[]))
+    ),
+    { initialValue: [] }
+  );
+  private readonly normalizedQuery = toSignal(
+    this.searchQuery.valueChanges.pipe(
+      startWith(this.searchQuery.value),
+      map((query) => this.normalizeSearchTerm(query))
+    ),
+    { initialValue: '' }
+  );
+  readonly searchResults = computed(() => {
+    const query = this.normalizedQuery();
+    const results = this.allResults();
 
-  searchQuery = '';
-  readonly isLoading = signal(false);
-  readonly selectedIndex = signal(-1);
+    if (!query) {
+      return [];
+    }
 
-  constructor(public readonly searchModalService: SearchModalService) {
-    effect(() => {
-      if (this.searchModalService.isOpen()) {
-        if (isPlatformBrowser(this.platformId)) {
-          setTimeout(() => this.searchInput?.nativeElement.focus(), 0);
-        }
-      } else {
-        this.reset();
-      }
+    return results.filter((result) => {
+      const page = this.normalizeSearchTerm(result.page);
+      const category = this.normalizeSearchTerm(result.category);
+      return page.includes(query) || category.includes(query);
     });
-  }
+  });
+  readonly hasQuery = computed(() => this.normalizedQuery().length > 0);
+  readonly hasNoResults = computed(() => this.hasQuery() && this.searchResults().length === 0);
 
   @HostBinding('class.active')
   get isActive(): boolean {
     return this.searchModalService.isOpen();
   }
 
-  onKeydown(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        console.log('ArrowDown pressed. Current selected index:', this.selectedIndex());
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        console.log('ArrowUp pressed. Current selected index:', this.selectedIndex());
-        break;
-      case 'Enter': {
-        event.preventDefault();
-        console.log('Selected index on Enter:', this.selectedIndex());
-        break;
-      }
-      case 'Escape':
-        this.searchModalService.close();
-        break;
-    }
+  trackByHref(_: number, result: SearchResult): string {
+    return result.href;
   }
 
-  onResultHover(index: number): void {
-    this.selectedIndex.set(index);
+  private normalizeSearchTerm(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
-  onResultsMouseLeave(): void {
-    console.log('Mouse left results. Current selected index:', this.selectedIndex());
-  }
-
-  private reset(): void {
-    this.searchQuery = '';
-    this.selectedIndex.set(-1);
-    this.isLoading.set(false);
-    this.searchStream$.next('');
+  private toTitleCase(value: string): string {
+    return value
+      .replace(/[_.-]+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 }

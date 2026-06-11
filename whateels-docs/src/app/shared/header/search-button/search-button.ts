@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SearchModalService } from '../../services/search-modal.service';
 
 @Component({
@@ -8,5 +8,5 @@ import { SearchModalService } from '../../services/search-modal.service';
 	styleUrl: './search-button.css',
 })
 export class SearchButton {
-	constructor(public searchModalService: SearchModalService) {}
+	searchModalService = inject(SearchModalService);
 }

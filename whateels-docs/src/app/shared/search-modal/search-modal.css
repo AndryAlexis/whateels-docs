@@ -51,6 +51,7 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         & .search-results {
+            overflow: clip;
 
             & .no-results {
                 padding: 2rem 1rem;
@@ -70,16 +71,18 @@
                 flex-direction: column;
                 padding: .7rem;
 
+                max-height: 90dvh;
+
                 & .result-item {
                     padding: 1rem;
                     cursor: pointer;
                     border-radius: 10px;
 
-                    &[aria-selected="true"] {
+                    &:hover{
                         background-color: #f8fafc;
 
                         & p:first-of-type {
-                            color: var(--ui-brand-secondary) !important;
+                            color: var(--ui-brand-secondary);
                         }
                     }
 
@@ -144,6 +147,7 @@
             outline: none;
             width: 100%;
             font-size: 1rem;
+            color: var(--ui-accent-dark);
 
             &::placeholder {
                 color: var(--ui-accent-light);
@@ -160,4 +164,12 @@
         background-color: #130a13bd;
         cursor: pointer;
     }
+}
+
+
+/* Only for iOS devices */
+@supports (-webkit-touch-callout: none) {
+  textarea, input[type="text"] {
+    font-size: 16px !important; /* Prevents iOS from zooming in on the textarea */
+  }
 }

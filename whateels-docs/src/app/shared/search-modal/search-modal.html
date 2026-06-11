@@ -2,9 +2,7 @@
     <div class="search-input">
         <i class="fas fa-search" aria-hidden="true"></i>
         <input
-            #searchInput
-            [ngModel]="searchQuery"
-            (keydown)="onKeydown($event)"
+            [formControl]="searchQuery"
             type="text"
             placeholder="Find something..."
             autocomplete="off"
@@ -16,19 +14,36 @@
         />
     </div>
     <div class="search-results">
-        <nav class="results" (mouseleave)="onResultsMouseLeave()">
-            <ul id="search-results-list" role="listbox" aria-label="Search results">
-                <li
-                    class="result-item"
-                    role="option"
-                >
-                    <a [routerLink]="['/']" (click)="searchModalService.close()">
+        <nav class="results">
+            @if (hasQuery()) {
+                <ul id="search-results-list" role="listbox" aria-label="Search results">
+                        @for (result of searchResults(); track trackByHref($index, result)) {
+                            <li
+                                class="result-item"
+                                role="option"
+                            >
+                                <a aria-selected="false" [routerLink]="result.href" (click)="searchModalService.close()">
+                                    {{ result.page }}
+                                    <p>
+                                        {{ result.category }}
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                </ul>
+            }
+            @if (hasNoResults()) {
+                <ul id="empty-search-results-list" role="listbox" aria-label="Search results">
+                    <li
+                        class="result-item"
+                        role="option"
+                    >
                         <p>
-                            lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus, voluptate?
+                            No matching pages found.
                         </p>
-                    </a>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            }
         </nav>
     </div>
 </div>
