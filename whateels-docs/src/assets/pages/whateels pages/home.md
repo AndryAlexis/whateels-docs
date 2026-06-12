@@ -1,3 +1,5 @@
+<!-- order: 1 -->
+
 ## Introduction
 The Home page is the starting point of WhatEELS. Its primary function is file loading and initial dataset exploration.
 

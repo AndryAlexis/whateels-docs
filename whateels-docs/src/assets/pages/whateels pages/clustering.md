@@ -1,3 +1,5 @@
+<!-- order: 4 -->
+
 ## Introduction
 The Clustering page provides unsupervised spectral grouping of a Spectrum Image dataset using three classical clustering algorithms.
 

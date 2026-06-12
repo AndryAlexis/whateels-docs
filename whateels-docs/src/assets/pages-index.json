@@ -1,21 +1,26 @@
 {
   "categories": [
     {
-      "name": "introduction",
+      "name": "about",
       "pages": [
         "lens group",
-        "university of barcelona",
+        "university of barcelona"
+      ]
+    },
+    {
+      "name": "introduction",
+      "pages": [
         "whateels"
       ]
     },
     {
       "name": "whateels pages",
       "pages": [
-        "advanced clustering",
-        "clustering",
-        "fitting",
         "home",
         "metadata",
+        "fitting",
+        "clustering",
+        "advanced clustering",
         "quantification"
       ]
     }
