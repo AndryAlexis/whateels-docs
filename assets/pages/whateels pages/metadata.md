@@ -1,3 +1,5 @@
+<!-- order: 2 -->
+
 ## Metadata Details Page
 The Metadata Details page provides a structured view of the raw metadata embedded in the uploaded DM3 or DM4 file.
 

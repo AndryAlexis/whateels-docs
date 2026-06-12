@@ -1,3 +1,5 @@
+<!-- order: 6 -->
+
 ## Quantification Page
 The Quantification page enables elemental quantification of EELS spectra from a selected region of interest using cross-section models.
 
