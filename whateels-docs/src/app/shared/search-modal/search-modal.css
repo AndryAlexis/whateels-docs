@@ -73,6 +73,10 @@
 
                 max-height: 90dvh;
 
+                &:empty {
+                    display: none;
+                }
+
                 & .result-item {
                     padding: 1rem;
                     cursor: pointer;
