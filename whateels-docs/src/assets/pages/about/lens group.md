@@ -1,6 +1,5 @@
 <!-- order: 1 -->
 
-
 ## LENS Group Overview
 LENS stands for Laboratory of Electron Nanoscopies. Based on their official site, LENS is part of the MIND group (Micro-nanotechnologies and Nanoscopies for Electrophotonic Devices) within the Department of Electronics and Biomedical Engineering at the Faculty of Physics, University of Barcelona.
 

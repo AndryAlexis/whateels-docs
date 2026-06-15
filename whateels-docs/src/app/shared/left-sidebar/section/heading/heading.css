@@ -4,5 +4,10 @@
         font-weight: bold;
         color: var(--ui-accent-dark);
         text-transform: capitalize;
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
 }

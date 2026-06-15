@@ -9,6 +9,7 @@ import { Logo } from '../logo/logo';
 import { LeftSidebarService } from '../services/leftsidebar.service';
 
 type PagesIndexResponse = { categories: { name: string; pages: string[] }[] };
+const HIDDEN_PAGES = new Set(['index']);
 
 @Component({
   selector: 'app-left-sidebar',
@@ -37,11 +38,13 @@ export class LeftSidebar {
       map(([response, currentPage]) =>
         response.categories.map((category) => ({
           title: category.name,
-          items: category.pages.map((page) => ({
-            name: page,
-            href: `/${this.slugify(category.name)}/${this.slugify(page)}`,
-            isActive: this.slugify(page) === currentPage,
-          })),
+          items: category.pages
+            .filter((page) => !HIDDEN_PAGES.has(page))
+            .map((page) => ({
+              name: page,
+              href: `/${this.slugify(category.name)}/${this.slugify(page)}`,
+              isActive: this.slugify(page) === currentPage,
+            })),
         }))
       )
     ),
