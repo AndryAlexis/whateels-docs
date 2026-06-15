@@ -6,6 +6,11 @@ const pagesRoot = join(projectRoot, 'src', 'assets', 'pages');
 const srcAssetsRoot = join(projectRoot, 'src', 'assets');
 const srcPagesIndexPath = join(srcAssetsRoot, 'pages-index.json');
 
+function parseNumericComment(content, key, fallback) {
+  const match = content.match(new RegExp(`${key}:\\s*(\\d+)`));
+  return match ? parseInt(match[1], 10) : fallback;
+}
+
 async function buildPagesIndex() {
   const categoryEntries = await readdir(pagesRoot, { withFileTypes: true });
 
@@ -18,35 +23,36 @@ async function buildPagesIndex() {
 
         const mdFiles = pageEntries.filter((p) => p.isFile() && p.name.endsWith('.md'));
 
-        // Leemos el contenido de cada archivo para buscar su "order"
+        // Read each markdown file to extract its page order.
         const pagesWithOrder = await Promise.all(
           mdFiles.map(async (pageEntry) => {
             const filePath = join(categoryPath, pageEntry.name);
             const content = await readFile(filePath, 'utf-8');
-            
-            // Esta línea busca "order: número" sin importar si está en guiones o comentarios
-            const match = content.match(/order:\s*(\d+)/);
-            const order = match ? parseInt(match[1], 10) : 999;
+            const order = parseNumericComment(content, 'order', 999);
 
             return {
               name: pageEntry.name.slice(0, -3),
-              order: order
+              order,
             };
           })
         );
 
-        // Ordenamos numéricamente por la propiedad 'order'
+        // Sort pages numerically by their `order` comment.
         pagesWithOrder.sort((left, right) => left.order - right.order);
+
+        const indexEntry = mdFiles.find((pageEntry) => pageEntry.name === 'index.md');
+        const indexContent = indexEntry ? await readFile(join(categoryPath, indexEntry.name), 'utf-8') : '';
+        const categoryOrder = parseNumericComment(indexContent, 'category_order', 999);
 
         return {
           name: entry.name,
-          pages: pagesWithOrder.map(p => p.name), // Guardamos solo los nombres en el JSON
+          order: categoryOrder,
+          pages: pagesWithOrder.map((page) => page.name),
         };
       })
   );
 
-
-  categories.sort((left, right) => left.name.localeCompare(right.name));
+  categories.sort((left, right) => left.order - right.order || left.name.localeCompare(right.name));
 
   await mkdir(srcAssetsRoot, { recursive: true });
   await writeFile(srcPagesIndexPath, JSON.stringify({ categories }, null, 2));
