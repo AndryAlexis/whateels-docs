@@ -15,7 +15,7 @@
         <ul>
             @for (section of sections(); track section.title) {
                 <li>
-                    <app-section [title]="section.title" [items]="section.items"></app-section>
+                    <app-section [title]="section.title" [href]="section.href" [items]="section.items"></app-section>
                 </li>
             }
         </ul>

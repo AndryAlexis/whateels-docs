@@ -11,6 +11,7 @@ import { Item } from './item/item';
 })
 export class Section {
   title = input<string>('Section Title');
+  href = input<string>('/');
   items = input<{ name: string; href: string; isActive?: boolean }[]>([
     { name: 'Item 1', href: '#', isActive: true },
     { name: 'Item 2', href: '#'},

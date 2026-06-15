@@ -1,4 +1,4 @@
-<app-heading>{{ title() }}</app-heading>
+<app-heading [href]="href()">{{ title() }}</app-heading>
 <ul>
     @for (item of items(); track item.href) {
         <li>

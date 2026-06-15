@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,4 +7,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './heading.html',
   styleUrl: './heading.css',
 })
-export class Heading {}
+export class Heading {
+  href = input<string>('/');
+}
