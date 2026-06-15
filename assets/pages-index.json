@@ -4,13 +4,15 @@
       "name": "about",
       "pages": [
         "lens group",
-        "university of barcelona"
+        "university of barcelona",
+        "index"
       ]
     },
     {
       "name": "introduction",
       "pages": [
-        "whateels"
+        "whateels",
+        "index"
       ]
     },
     {
@@ -21,7 +23,8 @@
         "fitting",
         "clustering",
         "advanced clustering",
-        "quantification"
+        "quantification",
+        "index"
       ]
     }
   ]
