@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class EmailAdminService {
-  isOpen = signal<boolean>(false);
+  isOpen = signal<boolean>(true);
 
   open(): void {
     this.isOpen.set(true);

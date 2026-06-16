@@ -1,8 +1,5 @@
 <article class="email">
     <header class="chat-header">
-        <button (click)="openWhateelbot()">
-            <i class="fa-solid fa-angle-left"></i>
-        </button>
         <h6>Email to admin</h6>
         <button (click)="closeChat()">
             <i class="fa-solid fa-window-minimize"></i>
@@ -32,9 +29,6 @@
         <textarea id="message" placeholder="Your message" formControlName="message"></textarea>
     </form>
     <footer class="chat-footer">
-        <button (click)="openWhateelbot()">
-            Cancel
-        </button>
         <input type="submit" value="Send Email" form="email-form" [disabled]="emailForm.invalid">
     </footer>
 </article>

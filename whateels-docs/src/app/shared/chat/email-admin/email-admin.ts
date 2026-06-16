@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { WhateelbotService } from '../../services/whateelbot.service';
 import { EmailAdminService } from '../../services/email-admin.service';
 import { ChatService } from '../../services/chat.service';
 import { EmailStatusService } from '../../services/email-status.service';
@@ -21,7 +20,6 @@ type EmailJsError = {
 export class EmailAdmin {
   private readonly formBuilder = inject(FormBuilder);
   private readonly chatService = inject(ChatService);
-  private readonly whateelbotService = inject(WhateelbotService);
   private readonly emailAdminService = inject(EmailAdminService);
   private readonly emailStatusService = inject(EmailStatusService);
   private isSending = false;
@@ -29,11 +27,6 @@ export class EmailAdmin {
   private readonly serviceId = 'service_1g2l90b';
   private readonly templateId = 'template_ns19wkj';
   private readonly publicKey = 'JyiNTj9AATdJvPPB1';
-
-  openWhateelbot(): void {
-    this.emailAdminService.close();
-    this.whateelbotService.open();
-  }
 
   closeChat(): void {
     this.chatService.close();
