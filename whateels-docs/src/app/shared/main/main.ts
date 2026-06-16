@@ -7,7 +7,6 @@ import { catchError, map, of, scan, startWith, switchMap, timeout } from 'rxjs';
 import { RightSidebar } from '../right-sidebar/right-sidebar';
 import { Footer } from '../footer/footer';
 import { Divider } from '../divider/divider';
-import { PaginationComponent } from '../pagination/pagination';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ObservableSectionService } from '../services/observable-section.service';
 
@@ -24,7 +23,7 @@ type MarkdownEvent =
 
 @Component({
   selector: 'app-main',
-  imports: [RightSidebar, Footer, Divider, PaginationComponent, MarkdownComponent],
+  imports: [RightSidebar, Footer, Divider, MarkdownComponent],
   templateUrl: './main.html',
   styleUrl: './main.css',
 })
