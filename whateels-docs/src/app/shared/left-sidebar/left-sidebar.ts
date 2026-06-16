@@ -53,6 +53,13 @@ export class LeftSidebar {
 
   constructor(public leftSidebarService: LeftSidebarService) {}
 
+  onNavigationClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (target instanceof Element && target.closest('a')) {
+      this.leftSidebarService.close();
+    }
+  }
 
   @HostBinding('class.active')
   get isActive(): boolean {
